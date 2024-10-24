@@ -30,11 +30,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		3187A6A92CCAF4EE0034FA88 /* The Stuff App */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "The Stuff App";
-			sourceTree = "<group>";
-		};
 		3187A6BB2CCAF4EF0034FA88 /* The Stuff AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "The Stuff AppTests";
@@ -43,6 +38,11 @@
 		3187A6C52CCAF4EF0034FA88 /* The Stuff AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "The Stuff AppUITests";
+			sourceTree = "<group>";
+		};
+		3187A6E72CCAF55D0034FA88 /* The Stuff App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "The Stuff App";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +75,7 @@
 		3187A69E2CCAF4EE0034FA88 = {
 			isa = PBXGroup;
 			children = (
-				3187A6A92CCAF4EE0034FA88 /* The Stuff App */,
+				3187A6E72CCAF55D0034FA88 /* The Stuff App */,
 				3187A6BB2CCAF4EF0034FA88 /* The Stuff AppTests */,
 				3187A6C52CCAF4EF0034FA88 /* The Stuff AppUITests */,
 				3187A6A82CCAF4EE0034FA88 /* Products */,
@@ -108,7 +108,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				3187A6A92CCAF4EE0034FA88 /* The Stuff App */,
+				3187A6E72CCAF55D0034FA88 /* The Stuff App */,
 			);
 			name = "The Stuff App";
 			packageProductDependencies = (
