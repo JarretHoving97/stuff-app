@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-
 struct ModalViewModifier<Destination: View, Bindable: Identifiable>: ViewModifier {
     @Binding var value: Bindable?
     let destination: (_ value: Bindable) -> Destination

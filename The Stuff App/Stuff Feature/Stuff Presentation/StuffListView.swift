@@ -33,21 +33,34 @@ struct StuffListView: View {
     var body: some View {
         
         ScrollView {
-            VStack {
+            LazyVStack(spacing: -40) {
                 ForEach(viewModel.items) { item in
                     TaskView(item: item, animation: animation)
-                        .matchedGeometryEffect(id: item, in: animation)
-                    
+                        .matchedGeometryEffect(id: item.id, in: animation)
                         .onTapGesture {
-                            withAnimation(.linear(duration: 0.2)) {
-                                viewModel.selectedItem = item
-                     
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ){
+                                withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.2)) {
+                                    viewModel.selectedItem = item
+                         
+                                }
                             }
                         }
                 }
             }
-            .padding(.top, 0)
+            .padding(.top, 40)
         }
+        .background() {
+            Color.white.ignoresSafeArea(.all)
+        }
+        .modal(bindable: $viewModel.selectedItem) { value in
+            StuffDetailView(
+                animation: animation,
+                item: value,
+                show: $viewModel.selectedItem.toBoolBinding
+            )
+            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+        }
+        
 
     }
 }
@@ -57,9 +70,9 @@ struct StuffListView: View {
     StuffListView(
         viewModel: StuffListViewModel(
             items: [
-                StuffItem(color: .black, name: "Call the dentis"),
-                StuffItem(color: .black, name: "Mail maintanance engineer back"),
-                StuffItem(color: .black, name: "Create mail invitation"),
+                StuffItem(color: .purple, name: "Call the dentist"),
+                StuffItem(color: .blue, name: "Mail maintanance engineer back"),
+                StuffItem(color: .brown, name: "Create mail invitation"),
             ]
         )
     )

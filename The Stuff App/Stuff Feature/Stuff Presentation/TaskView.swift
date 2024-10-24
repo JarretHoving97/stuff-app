@@ -19,11 +19,16 @@ struct TaskView: View {
                 .shadow(radius: 10)
             
             Text(item.name)
-                .font(.largeTitle)
+                .font(.title)
                 .foregroundColor(.white)
+                .lineLimit(3, reservesSpace: true)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .multilineTextAlignment(.leading)
+                .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
+                
         }
-        .frame(height: 180)
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+        .frame(height: 100)
+        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
     }
 }
 

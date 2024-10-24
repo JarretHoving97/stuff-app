@@ -9,13 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        StuffListView(
+            viewModel: StuffListViewModel(
+                items: [
+                    StuffItem(color: .purple, name: "Call the dentist"),
+                    StuffItem(color: .blue, name: "Mail maintanance engineer back"),
+                    StuffItem(color: .brown, name: "Create mail invitation"),
+                ]
+            )
+        )
     }
 }
 
