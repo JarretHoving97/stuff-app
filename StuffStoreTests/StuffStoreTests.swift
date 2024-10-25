@@ -35,7 +35,11 @@ struct StuffStoreTests {
     let sut = StuffStore()
     
     @Test func doesNotHaveStuffOnCreation() async throws {
-        assert(sut.stuffItems.isEmpty)
+        try await expect(sut, toRetrieve: [])
+    }
+    
+    @Test func retrievesEmpty() async throws {
+        try await expect(sut, toRetrieve: [])
     }
     
     @Test func doesStoreItemWhenAdded() async throws {
@@ -43,26 +47,19 @@ struct StuffStoreTests {
         try await sut.insert([makeUniqueItem()])
         assert(!sut.stuffItems.isEmpty)
     }
-    
-    @Test func retrievesEmpty() async throws {
-        let items = try await sut.retrieve()
-        assert(items.isEmpty)
-    }
-    
+
     @Test func retrievesStoredItem() async throws {
         let item = makeUniqueItem()
         try await sut.insert([item])
         
-        let items = try await sut.retrieve()
-        assert(items == [item])
+        try await expect(sut, toRetrieve: [item])
     }
     
     @Test func retrievesMultipleStoredItems() async throws {
         let items = makeUniqueItems()
         try await sut.insert(items)
-        
-        let retrievedItems = try await sut.retrieve()
-        assert(retrievedItems == items)
+ 
+        try await expect(sut, toRetrieve: items)
     }
     
     @Test func errorsWhenAddingDuplicateItem() async throws {
@@ -72,8 +69,7 @@ struct StuffStoreTests {
             try await sut.insert([item, item])
         }
         
-        let items = try await sut.retrieve()
-        assert(items.count == 1)
+        try await expect(sut, toRetrieve: [item])
     }
     
     @Test func errorsWhenAddingItemWithSameName() async throws {
@@ -83,12 +79,15 @@ struct StuffStoreTests {
         await #expect(throws: (StuffStore.Error.sameName).self ) {
             try await sut.insert([item1, item2])
         }
-        let items = try await sut.retrieve()
-        assert(items.count == 1)
+        try await expect(sut, toRetrieve: [item1])
     }
-    
-    
+
     // MARK: Helpers
+    
+    private func expect(_ sut: StuffStore, toRetrieve expectedStuff: [StuffItem], file: StaticString = #file, line: UInt = #line) async throws {
+        let retrievedStuff = try await sut.retrieve()
+        assert(retrievedStuff == expectedStuff, "Expected \(expectedStuff) but got \(retrievedStuff) instead", file: file, line: line)
+    }
     
     private func makeUniqueItem(with name: String = "A task to do") -> StuffItem {
         StuffItem(color: .black, name: name)
