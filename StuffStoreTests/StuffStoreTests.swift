@@ -7,6 +7,7 @@
 
 import Testing
 @testable import The_Stuff_App
+import Foundation
 
 class StuffStore {
     
@@ -15,6 +16,7 @@ class StuffStore {
     enum Error: Swift.Error {
         case duplicate
         case sameName
+        case notFound
     }
     
     func insert(_ items: [StuffItem]) async throws {
@@ -27,6 +29,11 @@ class StuffStore {
     
     func retrieve() async throws -> [StuffItem] {
         return stuffItems
+    }
+    
+    func delete(_ id: UUID) async throws {
+        guard let index = stuffItems.firstIndex(where: {$0.id == id}) else { throw Error.notFound }
+        stuffItems.remove(at: index)
     }
 }
 
@@ -80,6 +87,28 @@ struct StuffStoreTests {
             try await sut.insert([item1, item2])
         }
         try await expect(sut, toRetrieve: [item1])
+    }
+    
+    @Test func retrievesEmptyWhenNoItemsFoundAfterDeleting() async throws {
+        let sut = StuffStore()
+        let item = makeUniqueItem()
+        
+        try await sut.insert([item])
+        try await sut.delete(item.id)
+        
+        try await expect(sut, toRetrieve: [])
+    }
+    
+    @Test func throwsErrorAfterDeletingNonExistingItem() async throws {
+        let sut = StuffStore()
+        let uniqueItems = makeUniqueItems()
+        try await sut.insert(uniqueItems)
+        
+        await #expect(throws: (StuffStore.Error.notFound).self ) {
+            try await sut.delete(UUID())
+        }
+        
+       try await expect(sut, toRetrieve: uniqueItems)
     }
 
     // MARK: Helpers
