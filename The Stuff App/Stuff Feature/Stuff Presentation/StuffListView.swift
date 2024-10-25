@@ -31,7 +31,7 @@ struct StuffListView: View {
     }
     
     var body: some View {
-        
+
         ScrollView {
             LazyVStack(spacing: -40) {
                 ForEach(viewModel.items) { item in

@@ -7,14 +7,7 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		3187A6B92CCAF4EF0034FA88 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3187A69F2CCAF4EE0034FA88 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3187A6A62CCAF4EE0034FA88;
-			remoteInfo = "The Stuff App";
-		};
-		3187A6C32CCAF4EF0034FA88 /* PBXContainerItemProxy */ = {
+		3166EF312CCC267900CAA104 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3187A69F2CCAF4EE0034FA88 /* Project object */;
 			proxyType = 1;
@@ -24,20 +17,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3166EF2D2CCC267900CAA104 /* StuffStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3187A6A72CCAF4EE0034FA88 /* The Stuff App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Stuff App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3187A6B82CCAF4EF0034FA88 /* The Stuff AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "The Stuff AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3187A6C22CCAF4EF0034FA88 /* The Stuff AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "The Stuff AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		3187A6BB2CCAF4EF0034FA88 /* The Stuff AppTests */ = {
+		3166EF2E2CCC267900CAA104 /* StuffStoreTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "The Stuff AppTests";
-			sourceTree = "<group>";
-		};
-		3187A6C52CCAF4EF0034FA88 /* The Stuff AppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "The Stuff AppUITests";
+			path = StuffStoreTests;
 			sourceTree = "<group>";
 		};
 		3187A6E72CCAF55D0034FA88 /* The Stuff App */ = {
@@ -48,21 +35,14 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3166EF2A2CCC267900CAA104 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3187A6A42CCAF4EE0034FA88 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3187A6B52CCAF4EF0034FA88 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3187A6BF2CCAF4EF0034FA88 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,8 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				3187A6E72CCAF55D0034FA88 /* The Stuff App */,
-				3187A6BB2CCAF4EF0034FA88 /* The Stuff AppTests */,
-				3187A6C52CCAF4EF0034FA88 /* The Stuff AppUITests */,
+				3166EF2E2CCC267900CAA104 /* StuffStoreTests */,
 				3187A6A82CCAF4EE0034FA88 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,8 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				3187A6A72CCAF4EE0034FA88 /* The Stuff App.app */,
-				3187A6B82CCAF4EF0034FA88 /* The Stuff AppTests.xctest */,
-				3187A6C22CCAF4EF0034FA88 /* The Stuff AppUITests.xctest */,
+				3166EF2D2CCC267900CAA104 /* StuffStoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +73,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3166EF2C2CCC267900CAA104 /* StuffStoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3166EF332CCC267900CAA104 /* Build configuration list for PBXNativeTarget "StuffStoreTests" */;
+			buildPhases = (
+				3166EF292CCC267900CAA104 /* Sources */,
+				3166EF2A2CCC267900CAA104 /* Frameworks */,
+				3166EF2B2CCC267900CAA104 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3166EF322CCC267900CAA104 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3166EF2E2CCC267900CAA104 /* StuffStoreTests */,
+			);
+			name = StuffStoreTests;
+			packageProductDependencies = (
+			);
+			productName = StuffStoreTests;
+			productReference = 3166EF2D2CCC267900CAA104 /* StuffStoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		3187A6A62CCAF4EE0034FA88 /* The Stuff App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3187A6CC2CCAF4EF0034FA88 /* Build configuration list for PBXNativeTarget "The Stuff App" */;
@@ -117,52 +118,6 @@
 			productReference = 3187A6A72CCAF4EE0034FA88 /* The Stuff App.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3187A6B72CCAF4EF0034FA88 /* The Stuff AppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3187A6CF2CCAF4EF0034FA88 /* Build configuration list for PBXNativeTarget "The Stuff AppTests" */;
-			buildPhases = (
-				3187A6B42CCAF4EF0034FA88 /* Sources */,
-				3187A6B52CCAF4EF0034FA88 /* Frameworks */,
-				3187A6B62CCAF4EF0034FA88 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3187A6BA2CCAF4EF0034FA88 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				3187A6BB2CCAF4EF0034FA88 /* The Stuff AppTests */,
-			);
-			name = "The Stuff AppTests";
-			packageProductDependencies = (
-			);
-			productName = "The Stuff AppTests";
-			productReference = 3187A6B82CCAF4EF0034FA88 /* The Stuff AppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		3187A6C12CCAF4EF0034FA88 /* The Stuff AppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3187A6D22CCAF4EF0034FA88 /* Build configuration list for PBXNativeTarget "The Stuff AppUITests" */;
-			buildPhases = (
-				3187A6BE2CCAF4EF0034FA88 /* Sources */,
-				3187A6BF2CCAF4EF0034FA88 /* Frameworks */,
-				3187A6C02CCAF4EF0034FA88 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3187A6C42CCAF4EF0034FA88 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				3187A6C52CCAF4EF0034FA88 /* The Stuff AppUITests */,
-			);
-			name = "The Stuff AppUITests";
-			packageProductDependencies = (
-			);
-			productName = "The Stuff AppUITests";
-			productReference = 3187A6C22CCAF4EF0034FA88 /* The Stuff AppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -173,16 +128,12 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					3166EF2C2CCC267900CAA104 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 3187A6A62CCAF4EE0034FA88;
+					};
 					3187A6A62CCAF4EE0034FA88 = {
 						CreatedOnToolsVersion = 16.0;
-					};
-					3187A6B72CCAF4EF0034FA88 = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 3187A6A62CCAF4EE0034FA88;
-					};
-					3187A6C12CCAF4EF0034FA88 = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 3187A6A62CCAF4EE0034FA88;
 					};
 				};
 			};
@@ -201,28 +152,20 @@
 			projectRoot = "";
 			targets = (
 				3187A6A62CCAF4EE0034FA88 /* The Stuff App */,
-				3187A6B72CCAF4EF0034FA88 /* The Stuff AppTests */,
-				3187A6C12CCAF4EF0034FA88 /* The Stuff AppUITests */,
+				3166EF2C2CCC267900CAA104 /* StuffStoreTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3166EF2B2CCC267900CAA104 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3187A6A52CCAF4EE0034FA88 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3187A6B62CCAF4EF0034FA88 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3187A6C02CCAF4EF0034FA88 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,21 +175,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3166EF292CCC267900CAA104 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3187A6A32CCAF4EE0034FA88 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3187A6B42CCAF4EF0034FA88 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3187A6BE2CCAF4EF0034FA88 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,19 +192,69 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3187A6BA2CCAF4EF0034FA88 /* PBXTargetDependency */ = {
+		3166EF322CCC267900CAA104 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				macos,
+			);
 			target = 3187A6A62CCAF4EE0034FA88 /* The Stuff App */;
-			targetProxy = 3187A6B92CCAF4EF0034FA88 /* PBXContainerItemProxy */;
-		};
-		3187A6C42CCAF4EF0034FA88 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3187A6A62CCAF4EE0034FA88 /* The Stuff App */;
-			targetProxy = 3187A6C32CCAF4EF0034FA88 /* PBXContainerItemProxy */;
+			targetProxy = 3166EF312CCC267900CAA104 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		3166EF342CCC267900CAA104 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K4BTMSB564;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jarretdevs.StuffStoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = NO;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Stuff App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/The Stuff App";
+			};
+			name = Debug;
+		};
+		3166EF352CCC267900CAA104 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K4BTMSB564;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jarretdevs.StuffStoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = NO;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Stuff App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/The Stuff App";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		3187A6CA2CCAF4EF0034FA88 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -414,10 +400,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jarretdevs.The-Stuff-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -453,100 +440,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jarretdevs.The-Stuff-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		3187A6D02CCAF4EF0034FA88 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K4BTMSB564;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jarretdevs.The-Stuff-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Stuff App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/The Stuff App";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		3187A6D12CCAF4EF0034FA88 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K4BTMSB564;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jarretdevs.The-Stuff-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Stuff App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/The Stuff App";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		3187A6D32CCAF4EF0034FA88 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K4BTMSB564;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jarretdevs.The-Stuff-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "The Stuff App";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		3187A6D42CCAF4EF0034FA88 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K4BTMSB564;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jarretdevs.The-Stuff-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "The Stuff App";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -554,6 +452,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3166EF332CCC267900CAA104 /* Build configuration list for PBXNativeTarget "StuffStoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3166EF342CCC267900CAA104 /* Debug */,
+				3166EF352CCC267900CAA104 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3187A6A22CCAF4EE0034FA88 /* Build configuration list for PBXProject "The Stuff App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -568,24 +475,6 @@
 			buildConfigurations = (
 				3187A6CD2CCAF4EF0034FA88 /* Debug */,
 				3187A6CE2CCAF4EF0034FA88 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3187A6CF2CCAF4EF0034FA88 /* Build configuration list for PBXNativeTarget "The Stuff AppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3187A6D02CCAF4EF0034FA88 /* Debug */,
-				3187A6D12CCAF4EF0034FA88 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3187A6D22CCAF4EF0034FA88 /* Build configuration list for PBXNativeTarget "The Stuff AppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3187A6D32CCAF4EF0034FA88 /* Debug */,
-				3187A6D42CCAF4EF0034FA88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

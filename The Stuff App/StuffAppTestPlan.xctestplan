@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "A66E1034-6B0D-4E69-A0D5-4ED0C4765C6B",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:The Stuff App.xcodeproj",
+        "identifier" : "3166EF2C2CCC267900CAA104",
+        "name" : "StuffStoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}
