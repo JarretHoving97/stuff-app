@@ -9,20 +9,14 @@ import Testing
 import Foundation
 @testable import The_Stuff_App
 
-class StuffStore {
+class StateBasedStuffStore: StuffStore {
     
     private(set) var stuffItems: [StuffItem] = []
     
-    enum Error: Swift.Error {
-        case duplicate
-        case sameName
-        case notFound
-    }
-    
     func insert(_ items: [StuffItem]) async throws {
        try items.forEach { newItem in
-           guard !stuffItems.contains(newItem) else { throw Error.duplicate }
-           guard !stuffItems.map({$0.name}).contains(newItem.name) else { throw Error.sameName }
+           guard !stuffItems.contains(newItem) else { throw StuffStoreError.duplicate }
+           guard !stuffItems.map({$0.name}).contains(newItem.name) else { throw StuffStoreError.sameName }
            stuffItems.append(newItem)
         }
     }
@@ -32,14 +26,14 @@ class StuffStore {
     }
     
     func delete(_ id: UUID) async throws {
-        guard let index = stuffItems.firstIndex(where: {$0.id == id}) else { throw Error.notFound }
+        guard let index = stuffItems.firstIndex(where: {$0.id == id}) else { throw StuffStoreError.notFound }
         stuffItems.remove(at: index)
     }
 }
 
 struct StuffStoreTests {
     
-    let sut = StuffStore()
+    let sut = StateBasedStuffStore()
     
     @Test func doesNotHaveStuffOnCreation() async throws {
         try await expect(sut, toRetrieve: [])
@@ -50,7 +44,6 @@ struct StuffStoreTests {
     }
     
     @Test func doesStoreItemWhenAdded() async throws {
-        let sut = StuffStore()
         try await sut.insert([makeUniqueItem()])
         assert(!sut.stuffItems.isEmpty)
     }
@@ -72,7 +65,7 @@ struct StuffStoreTests {
     @Test func errorsWhenAddingDuplicateItem() async throws {
         let item = makeUniqueItem()
         
-        await #expect(throws: (StuffStore.Error.duplicate).self ) {
+        await #expect(throws: (StuffStoreError.duplicate).self ) {
             try await sut.insert([item, item])
         }
         
@@ -83,14 +76,13 @@ struct StuffStoreTests {
         let item1 = makeUniqueItem(with: "task 1")
         let item2 = makeUniqueItem(with: "task 1")
         
-        await #expect(throws: (StuffStore.Error.sameName).self ) {
+        await #expect(throws: (StuffStoreError.sameName).self ) {
             try await sut.insert([item1, item2])
         }
         try await expect(sut, toRetrieve: [item1])
     }
     
     @Test func retrievesEmptyWhenNoItemsFoundAfterDeleting() async throws {
-        let sut = StuffStore()
         let item = makeUniqueItem()
         
         try await sut.insert([item])
@@ -100,11 +92,10 @@ struct StuffStoreTests {
     }
     
     @Test func throwsErrorAfterDeletingNonExistingItem() async throws {
-        let sut = StuffStore()
         let uniqueItems = makeUniqueItems()
         try await sut.insert(uniqueItems)
         
-        await #expect(throws: (StuffStore.Error.notFound).self ) {
+        await #expect(throws: (StuffStoreError.notFound).self ) {
             try await sut.delete(UUID())
         }
         
