@@ -6,8 +6,8 @@
 //
 
 import Testing
-@testable import The_Stuff_App
 import Foundation
+@testable import The_Stuff_App
 
 class StuffStore {
     

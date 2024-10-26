@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ManagedStuffAction" representedClassName="ManagedStuffAction" syncable="YES">
+        <attribute name="actionDescription" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="relationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStuffItem" inverseName="relationship" inverseEntity="ManagedStuffItem"/>
+    </entity>
+    <entity name="ManagedStuffItem" representedClassName="ManagedStuffItem" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="rememberDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="state" attributeType="String"/>
+        <relationship name="relationship" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="ManagedStuffAction" inverseName="relationship" inverseEntity="ManagedStuffAction"/>
+    </entity>
+</model>
