@@ -21,6 +21,7 @@ class CoreDataStuffStore {
     }
     
     public init(storeURL: URL) throws {
+    
         guard let model = CoreDataStuffStore.model else {
             throw StoreError.modelNotFound
         }

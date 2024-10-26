@@ -8,18 +8,6 @@
 import CoreData
 import Foundation
 
-
-//@objc(ManagedFeedImage)
-//class ManagedFeedImage: NSManagedObject {
-//    @NSManaged var id: UUID
-//    @NSManaged var imageDescription: String?
-//    @NSManaged var location: String?
-//    @NSManaged var url: URL
-//    @NSManaged var data: Data?
-//    @NSManaged var cache: ManagedCache
-//}
-
-
 @objc(ManagedStuffItem)
 class ManagedStuffItem: NSManagedObject {
     @NSManaged var id: UUID
