@@ -9,27 +9,6 @@ import Testing
 import Foundation
 @testable import The_Stuff_App
 
-class StateBasedStuffStore: StuffStore {
-    
-    private(set) var stuffItems: [StuffItem] = []
-    
-    func insert(_ items: [StuffItem]) async throws {
-       try items.forEach { newItem in
-           guard !stuffItems.contains(newItem) else { throw StuffStoreError.duplicate }
-           guard !stuffItems.map({$0.name}).contains(newItem.name) else { throw StuffStoreError.sameName }
-           stuffItems.append(newItem)
-        }
-    }
-    
-    func retrieve() async throws -> [StuffItem] {
-        return stuffItems
-    }
-    
-    func delete(_ id: UUID) async throws {
-        guard let index = stuffItems.firstIndex(where: {$0.id == id}) else { throw StuffStoreError.notFound }
-        stuffItems.remove(at: index)
-    }
-}
 
 struct StuffStoreTests {
     
@@ -45,34 +24,38 @@ struct StuffStoreTests {
     
     @Test func doesStoreItemWhenAdded() async throws {
         let item = makeUniqueItem()
-        try await sut.insert([item])
+        try await sut.insert(item)
         try await expect(sut, toRetrieve: [item])
     }
 
     @Test func retrievesStoredItem() async throws {
         let item = makeUniqueItem()
-        try await sut.insert([item])
+        try await sut.insert(item)
         
         try await expect(sut, toRetrieve: [item])
     }
     
     @Test func retrievesMultipleStoredItems() async throws {
         let items = makeUniqueItems()
-        try await sut.insert(items)
- 
+        
+        try await sut.insert(items[0])
+        try await sut.insert(items[1])
+        
         try await expect(sut, toRetrieve: items)
     }
-    
+//    
 //    @Test func errorsWhenAddingDuplicateItem() async throws {
 //        let item = makeUniqueItem()
-//        
+//        try await sut.insert(item)
+//            
 //        await #expect(throws: (StuffStoreError.duplicate).self ) {
-//            try await sut.insert([item, item])
+//            try await sut.insert(item)
+//    
 //        }
 //        
 //        try await expect(sut, toRetrieve: [item])
 //    }
-//    
+    
 //    @Test func errorsWhenAddingItemWithSameName() async throws {
 //        let item1 = makeUniqueItem(with: "task 1")
 //        let item2 = makeUniqueItem(with: "task 1")

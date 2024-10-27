@@ -35,3 +35,15 @@ struct StuffItem: Hashable, Identifiable {
         self.rememberDate = rememberDate
     }
 }
+
+extension StuffItem {
+    
+    init(managedStuffItem: ManagedStuffItem) {
+        self.id = managedStuffItem.id
+        self.color = .black
+        self.name = managedStuffItem.name
+        self.createdAt = managedStuffItem.createdAt
+        self.state = managedStuffItem.state
+        self.rememberDate = managedStuffItem.rememberDate
+    }
+}

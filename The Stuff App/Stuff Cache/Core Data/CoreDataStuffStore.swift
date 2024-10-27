@@ -36,20 +36,18 @@ class CoreDataStuffStore: StuffStore {
     }
     
     
-    func insert(_ items: [StuffItem]) async throws {
-    
-        let manageditems = items.map { localItem in
-            let managedItem = ManagedStuffItem(context: context)
-            managedItem.id = localItem.id
-            managedItem.createdAt = localItem.createdAt
-            managedItem.rememberDate = localItem.rememberDate
-            managedItem.state = localItem.state
-            managedItem.name = localItem.name
-            
-            return managedItem
-        }
-    
+    func insert(_ item: StuffItem) async throws {
+        let context = context // Use a background context for this work
+        
+        let managedItem = ManagedStuffItem(context: context)
+        managedItem.id = item.id
+        managedItem.createdAt = item.createdAt
+        managedItem.rememberDate = item.rememberDate
+        managedItem.state = item.state
+        managedItem.name = item.name
+        
         try context.save()
+        
     }
     
     func retrieve() async throws -> [StuffItem] {

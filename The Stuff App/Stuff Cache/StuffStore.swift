@@ -14,7 +14,7 @@ enum StuffStoreError: Swift.Error {
 }
 
 protocol StuffStore {
-    func insert(_ items: [StuffItem]) async throws
+    func insert(_ item: StuffItem) async throws
     func retrieve() async throws -> [StuffItem]
     func delete(_ id: UUID) async throws
 }
