@@ -26,11 +26,11 @@ extension ManagedStuffItem {
         
     }
     
-    static func find(id: UUID, in context: NSManagedObjectContext) throws -> [ManagedStuffItem]? {
+    static func find(id: UUID, in context: NSManagedObjectContext) throws -> ManagedStuffItem? {
         let request = NSFetchRequest<ManagedStuffItem>(entityName: entity().name!)
         request.returnsObjectsAsFaults = false
-        request.predicate = NSPredicate(format: "id == %@")
-        return try context.fetch(request)
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        return try context.fetch(request).first
         
     }
 }

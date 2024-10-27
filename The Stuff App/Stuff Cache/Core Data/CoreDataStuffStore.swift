@@ -21,6 +21,17 @@ class CoreDataStuffStore: StuffStore {
         case failedToLoadPersistentContainer(Error)
     }
     
+    private func cleanUpReferencesToPersistentStores() {
+        context.performAndWait {
+            let coordinator = self.container.persistentStoreCoordinator
+            try? coordinator.persistentStores.forEach(coordinator.remove)
+        }
+    }
+    
+    deinit {
+        cleanUpReferencesToPersistentStores()
+    }
+    
     public init(storeURL: URL) throws {
         
         guard let model = CoreDataStuffStore.model else {
@@ -37,7 +48,16 @@ class CoreDataStuffStore: StuffStore {
     
     
     func insert(_ item: StuffItem) async throws {
-        let context = context // Use a background context for this work
+        
+        let existingItems = try ManagedStuffItem.find(in: context) ?? []
+        
+        if existingItems.map({$0.name}).contains(item.name) {
+            throw StuffStoreError.sameName
+        }
+        
+        if existingItems.map({$0.id}).contains(item.id) {
+            throw StuffStoreError.duplicate
+        }
         
         let managedItem = ManagedStuffItem(context: context)
         managedItem.id = item.id

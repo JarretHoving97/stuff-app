@@ -12,7 +12,7 @@ import Foundation
 
 struct StuffStoreTests {
     
-    let sut: StuffStore = try! CoreDataStuffStore(storeURL: URL(fileURLWithPath: "/dev/null"))
+    let sut = try! CoreDataStuffStore(storeURL: URL(fileURLWithPath: "/dev/null"))
     
     @Test func doesNotHaveStuffOnCreation() async throws {
         try await expect(sut, toRetrieve: [])
@@ -43,28 +43,30 @@ struct StuffStoreTests {
         
         try await expect(sut, toRetrieve: items)
     }
-//    
-//    @Test func errorsWhenAddingDuplicateItem() async throws {
-//        let item = makeUniqueItem()
-//        try await sut.insert(item)
-//            
-//        await #expect(throws: (StuffStoreError.duplicate).self ) {
-//            try await sut.insert(item)
-//    
-//        }
-//        
-//        try await expect(sut, toRetrieve: [item])
-//    }
     
-//    @Test func errorsWhenAddingItemWithSameName() async throws {
-//        let item1 = makeUniqueItem(with: "task 1")
-//        let item2 = makeUniqueItem(with: "task 1")
-//        
-//        await #expect(throws: (StuffStoreError.sameName).self ) {
-//            try await sut.insert([item1, item2])
-//        }
-//        try await expect(sut, toRetrieve: [item1])
-//    }
+    
+    @Test func errorsWhenAddingDuplicateItem() async throws {
+        let item = makeUniqueItem()
+        let sameNameItem = StuffItem(id: item.id, color: .black, name: "an other name")
+    
+        await #expect(throws: (StuffStoreError.duplicate).self ) {
+            try await sut.insert(item)
+            try await sut.insert(sameNameItem)
+        }
+        
+        try await expect(sut, toRetrieve: [item])
+    }
+    
+    @Test func errorsWhenAddingItemWithSameName() async throws {
+        let item1 = makeUniqueItem(with: "task 1")
+        let item2 = makeUniqueItem(with: "task 1")
+        
+        await #expect(throws: (StuffStoreError.sameName).self ) {
+            try await sut.insert(item1)
+            try await sut.insert(item2)
+        }
+        try await expect(sut, toRetrieve: [item1])
+    }
 //    
 //    @Test func retrievesEmptyWhenNoItemsFoundAfterDeleting() async throws {
 //        let item = makeUniqueItem()
