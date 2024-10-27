@@ -17,6 +17,15 @@ class ManagedStuffItem: NSManagedObject {
     @NSManaged var rememberDate: Date?
 }
 
+extension ManagedStuffItem {
+    
+    static func find(in context: NSManagedObjectContext) throws -> [ManagedStuffItem]? {
+        let request = NSFetchRequest<ManagedStuffItem>(entityName: entity().name!)
+        request.returnsObjectsAsFaults = false
+        return try context.fetch(request)
+        
+    }
+}
 
 @objc(ManagedStuffAction)
 class ModalStuffAction: NSManagedObject {
