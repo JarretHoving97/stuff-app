@@ -77,6 +77,14 @@ class CoreDataStuffStore: StuffStore {
     }
     
     func delete(_ id: UUID) async throws {
+        let context = context
         
+        guard  try ManagedStuffItem.find(id: id, in: context) != nil else {
+            throw StuffStoreError.notFound
+        }
+        
+        try ManagedStuffItem.find(id: id, in: context)
+            .map(context.delete)
+            .map(context.save)
     }
 }

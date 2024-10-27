@@ -67,26 +67,27 @@ struct StuffStoreTests {
         }
         try await expect(sut, toRetrieve: [item1])
     }
-//    
-//    @Test func retrievesEmptyWhenNoItemsFoundAfterDeleting() async throws {
-//        let item = makeUniqueItem()
-//        
-//        try await sut.insert([item])
-//        try await sut.delete(item.id)
-//        
-//        try await expect(sut, toRetrieve: [])
-//    }
-//    
-//    @Test func throwsErrorAfterDeletingNonExistingItem() async throws {
-//        let uniqueItems = makeUniqueItems()
-//        try await sut.insert(uniqueItems)
-//        
-//        await #expect(throws: (StuffStoreError.notFound).self ) {
-//            try await sut.delete(UUID())
-//        }
-//        
-//       try await expect(sut, toRetrieve: uniqueItems)
-//    }
+
+    @Test func retrievesEmptyWhenNoItemsFoundAfterDeleting() async throws {
+        let item = makeUniqueItem()
+        
+        try await sut.insert(item)
+        try await sut.delete(item.id)
+        
+        try await expect(sut, toRetrieve: [])
+    }
+
+    @Test func throwsErrorAfterDeletingNonExistingItem() async throws {
+        let uniqueItems = makeUniqueItems()
+        try await sut.insert(uniqueItems[0])
+        try await sut.insert(uniqueItems[1])
+        
+        await #expect(throws: (StuffStoreError.notFound).self ) {
+            try await sut.delete(UUID())
+        }
+        
+       try await expect(sut, toRetrieve: uniqueItems)
+    }
 
     // MARK: Helpers
     
