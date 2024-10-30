@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-@Observable
-class StuffListViewModel {
+@MainActor
+@Observable class StuffListViewModel {
     
     private(set) var items: [StuffItem]
     
@@ -17,6 +17,12 @@ class StuffListViewModel {
     
     init(items: [StuffItem]) {
         self.items = items
+    }
+    
+    func selectItem(item: StuffItem) {
+        withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.2)) {
+            selectedItem = item
+        }
     }
 }
 
@@ -32,26 +38,7 @@ struct StuffListView: View {
     
     var body: some View {
 
-        ScrollView {
-            LazyVStack(spacing: -40) {
-                ForEach(viewModel.items) { item in
-                    TaskView(item: item, animation: animation)
-                        .matchedGeometryEffect(id: item.id, in: animation)
-                        .onTapGesture {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ){
-                                withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.2)) {
-                                    viewModel.selectedItem = item
-                         
-                                }
-                            }
-                        }
-                }
-            }
-            .padding(.top, 40)
-        }
-        .background() {
-            Color.white.ignoresSafeArea(.all)
-        }
+        listView
         .modal(bindable: $viewModel.selectedItem) { value in
             StuffDetailView(
                 animation: animation,
@@ -60,11 +47,27 @@ struct StuffListView: View {
             )
             .transition(.asymmetric(insertion: .opacity, removal: .opacity))
         }
-        
-
+    }
+    
+    private var listView: some View {
+        ScrollView {
+            LazyVStack(spacing: -40) {
+                ForEach(viewModel.items) { item in
+                    
+                    TaskView(item: item, animation: animation)
+                        .matchedGeometryEffect(id: item.id, in: animation)
+                        .onTapGesture {
+                            viewModel.selectItem(item: item)
+                        }
+                    }
+                }
+                .padding(.top, 40)
+            }
+        .background() {
+            Color.white.ignoresSafeArea(.all)
+        }
     }
 }
-
 
 #Preview {
     StuffListView(

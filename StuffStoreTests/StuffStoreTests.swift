@@ -88,6 +88,21 @@ struct StuffStoreTests {
         
        try await expect(sut, toRetrieve: uniqueItems)
     }
+    
+    @Test func updatesItem() async throws {
+        let item = makeUniqueItem()
+        
+        try await sut.insert(item)
+        
+        var updatedItem = item
+        updatedItem.name = "Updated task"
+    
+        
+        try await sut.update(item.id, with: updatedItem)
+        
+        try await expect(sut, toRetrieve: [updatedItem])
+    }
+    
 
     // MARK: Helpers
     
@@ -95,11 +110,9 @@ struct StuffStoreTests {
         let retrievedStuff = try await sut.retrieve()
         
         #expect(retrievedStuff == expectedStuff, sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column))
-  
     }
     
     private func makeUniqueItem(with name: String = "A task to do") -> StuffItem {
-
         StuffItem(color: .black, name: name)
     }
     

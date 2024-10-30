@@ -21,6 +21,7 @@ struct StuffDetailView: View {
             TaskView(item: item, animation: animation)
                 .matchedGeometryEffect(id: item.id, in: animation)
                 .onTapGesture {
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.2)) {
                             show.toggle()

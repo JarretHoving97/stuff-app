@@ -8,8 +8,7 @@
 import CoreData
 
 class CoreDataStuffStore: StuffStore {
-    
-    
+
     private static let modelName = "Stuff"
     private static let model = NSManagedObjectModel.with(name: modelName, in: Bundle(for: CoreDataStuffStore.self))
     
@@ -74,6 +73,23 @@ class CoreDataStuffStore: StuffStore {
         guard let items = try ManagedStuffItem.find(in: context) else { throw StoreError.modelNotFound }
         return items.map { StuffItem(id: $0.id, color: .black, name: $0.name, createdAt: $0.createdAt, state: $0.state, rememberDate: $0.rememberDate) }
 
+    }
+
+    
+    func update(_ id: UUID, with item: StuffItem) async throws {
+        let context = context
+        
+        if let managedItem = try ManagedStuffItem.find(id: id, in: context) {
+            
+            managedItem.name = item.name
+            managedItem.state = item.state
+            managedItem.rememberDate = item.rememberDate
+            
+            try context.save()
+            return
+        }
+        
+        throw StuffStoreError.notFound
     }
     
     func delete(_ id: UUID) async throws {

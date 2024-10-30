@@ -10,10 +10,10 @@ import SwiftUI
 
 struct StuffItem: Hashable, Identifiable {
     let id: UUID
-    let color: Color
-    let name: String
+    var color: Color
+    var name: String
     let createdAt: Date
-    let state: String
+    var state: String
     let rememberDate: Date?
     
     init(id: UUID = UUID(),color: Color, name: String) {

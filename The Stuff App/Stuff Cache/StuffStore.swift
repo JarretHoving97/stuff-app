@@ -17,4 +17,5 @@ protocol StuffStore {
     func insert(_ item: StuffItem) async throws
     func retrieve() async throws -> [StuffItem]
     func delete(_ id: UUID) async throws
+    func update(_ id: UUID, with item: StuffItem) async throws
 }
