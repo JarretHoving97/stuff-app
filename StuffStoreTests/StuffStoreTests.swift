@@ -103,6 +103,18 @@ struct StuffStoreTests {
         try await expect(sut, toRetrieve: [updatedItem])
     }
     
+    @Test func retrievesNonUpdatedWhenUpdatingNonExistingItem() async throws {
+        let item = makeUniqueItem()
+        
+        try await sut.insert(item)
+        
+        await #expect(throws: (StuffStoreError.notFound).self ) {
+            try await sut.update(UUID(), with: item)
+        }
+
+        
+        try await expect(sut, toRetrieve: [item])
+    }
 
     // MARK: Helpers
     
