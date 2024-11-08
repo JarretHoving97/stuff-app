@@ -13,6 +13,5 @@ struct The_Stuff_AppApp: App {
         WindowGroup {
             ContentView()
         }
-        
     }
 }

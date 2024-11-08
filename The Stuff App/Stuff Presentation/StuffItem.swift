@@ -47,3 +47,13 @@ extension StuffItem {
         self.rememberDate = managedStuffItem.rememberDate
     }
 }
+
+
+extension StuffItem {
+    
+    enum State: String {
+        case done
+        case scheduled
+        case remembered
+    }
+}

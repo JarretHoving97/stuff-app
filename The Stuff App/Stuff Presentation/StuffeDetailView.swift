@@ -10,30 +10,22 @@ import SwiftUI
 struct StuffDetailView: View {
     
     var animation: Namespace.ID
-    
     let item: StuffItem
-    
     @Binding var show: Bool
-    
     
     var body: some View {
         VStack {
-            TaskView(item: item, animation: animation)
-                .matchedGeometryEffect(id: item.id, in: animation)
+            TaskView(item: item)
+                .matchedGeometryEffect(id: item.id, in: animation, properties: .position, isSource: true)
                 .onTapGesture {
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.2)) {
-                            show.toggle()
-                        }
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                        show = false
                     }
                 }
                 .padding(.top, 40)
             Spacer()
         }
-        .background() {
-            Color.white.ignoresSafeArea(.all)
-        }
+        .background(Color.white.ignoresSafeArea())
     }
 }
 

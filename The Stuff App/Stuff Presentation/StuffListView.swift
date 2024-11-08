@@ -8,15 +8,18 @@
 
 import SwiftUI
 
+
 @MainActor
 @Observable class StuffListViewModel {
     
-    private(set) var items: [StuffItem]
+    private(set) var items = [StuffItem]()
     
     var selectedItem: StuffItem?
     
-    init(items: [StuffItem]) {
-        self.items = items
+    var store: StuffStore
+    
+    init(store: StuffStore) {
+        self.store = store
     }
     
     func selectItem(item: StuffItem) {
@@ -24,59 +27,93 @@ import SwiftUI
             selectedItem = item
         }
     }
+    
+    func retrieve(for date: Date = Date()) async {
+        let stuff = try? await store.retrieve()
+        self.items = stuff?
+            .filter { item in return date.isInPastOrToday(date: item.rememberDate) } ?? []
+    }
+    
+    func delete(_ item: UUID) async {
+        try? await store.delete(item)
+    }
 }
+
 
 struct StuffListView: View {
     
-    @Namespace private var animation
-    
-    @State private var viewModel: StuffListViewModel
-    
-    init(viewModel: StuffListViewModel) {
-        self.viewModel = viewModel
-    }
+    var viewModel: StuffListViewModel
     
     var body: some View {
-
-        listView
-        .modal(bindable: $viewModel.selectedItem) { value in
-            StuffDetailView(
-                animation: animation,
-                item: value,
-                show: $viewModel.selectedItem.toBoolBinding
+        ZStack(alignment: .bottomTrailing) { // Set alignment to bottomTrailing
+            ScrollView {
+                VStack(spacing: 20) {
+                    cardView
+                    cardView
+                    cardView
+                }
+                .padding()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                Color("bg_color")
+                    .ignoresSafeArea(.all)
             )
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            
+            Button {
+                print("tapped")
+            } label: {
+                ZStack {
+                    Color("item_secondary_color")
+                    Image(systemName: "plus")
+                        .tint(.white)
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Circle())
+            }
+            .padding() // Add padding to move it away from the screen edges
         }
+
     }
     
-    private var listView: some View {
-        ScrollView {
-            LazyVStack(spacing: -40) {
-                ForEach(viewModel.items) { item in
-                    
-                    TaskView(item: item, animation: animation)
-                        .matchedGeometryEffect(id: item.id, in: animation)
-                        .onTapGesture {
-                            viewModel.selectItem(item: item)
-                        }
-                    }
-                }
-                .padding(.top, 40)
-            }
-        .background() {
-            Color.white.ignoresSafeArea(.all)
+    
+    
+    var cardView: some View {
+        ZStack {
+            Text("Hello there!")
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+                .font(.headline)
+                .lineLimit(4, reservesSpace: true)
+                .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: 120)
+        .background(Color("item_primary_color"))
+        .cornerRadius(14)
+ 
+   
     }
 }
-
 #Preview {
+
     StuffListView(
         viewModel: StuffListViewModel(
-            items: [
-                StuffItem(color: .purple, name: "Call the dentist"),
-                StuffItem(color: .blue, name: "Mail maintanance engineer back"),
-                StuffItem(color: .brown, name: "Create mail invitation"),
-            ]
+            store: MockStore()
         )
     )
+}
+
+
+extension Date {
+    
+    public func isInPastOrToday(date: Date?) -> Bool {
+        guard let date else { return true}
+        return date.isInSame(.day, as: self) || self >= date
+    }
+    
+    public func isInSame(_ component: Calendar.Component, as date: Date) -> Bool {
+        return Calendar.current.isDate(self, equalTo: date, toGranularity: component)
+    }
 }

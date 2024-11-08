@@ -10,9 +10,9 @@ import SwiftUI
 struct TaskView: View {
     
     let item: StuffItem
-    let animation: Namespace.ID
     
     var body: some View {
+        
         ZStack {
             item.color
                 .cornerRadius(20)
@@ -35,5 +35,5 @@ struct TaskView: View {
 #Preview {
     @Previewable @Namespace var namespace
     
-    return TaskView(item: StuffItem(color: .blue, name: "TODO"), animation: namespace)
+    return TaskView(item: StuffItem(color: .blue, name: "TODO"))
 }
