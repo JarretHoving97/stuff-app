@@ -26,6 +26,7 @@ struct StuffActionView: View {
     
     var onClose: (() -> Void)?
 
+    @State private var showActions: Bool = false
     
     var body: some View {
         
@@ -42,7 +43,14 @@ struct StuffActionView: View {
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 24))
                     
                     Button {
-                        onClose?()
+                        withAnimation(.spring(duration: 0.6, bounce: 0.2, blendDuration: 0.2)) {
+                            showActions = false
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            onClose?()
+                        }
+                    
                     } label: {
     
                         Image(systemName: "xmark.circle.fill")
@@ -56,13 +64,13 @@ struct StuffActionView: View {
                     Color(.itemPrimary)
                         .cornerRadius(20)
                     
-                    Text("Call the dentist")
+                    Text(viewModel.item.name)
                         .foregroundStyle(.white)
                         .frame(alignment: .leading)
                         .font(.largeTitle)
                         .fontWeight(.semibold)
+                        .padding()
                     
-                        
                 }
                 .frame(height: 200)
                 .matchedGeometryEffect(id: viewModel.item.id, in: animation)
@@ -86,6 +94,7 @@ struct StuffActionView: View {
                         )
                         
                     }
+                    .offset(y: showActions ? 0 : 300)
                     GridRow {
                         StuffAction(
                             color: .otherItem,
@@ -101,12 +110,22 @@ struct StuffActionView: View {
                             shortDescription: "If not for you, delegate it to someone else."
                         )
                     }
+                    .offset(y: showActions ? 0 : 800)
+                   
                 }
                 .frame(maxWidth: .infinity, maxHeight: 380)
                 
                 Spacer()
-
             }
+ 
+            .onAppear {
+              
+                    withAnimation(.spring(duration: 0.6, bounce: 0.2, blendDuration: 0.2)) {
+                        showActions = true
+                    }
+                
+            }
+          
           
             .background(Color(.bg).clipShape(RoundedRectangle(cornerRadius: 20)))
         }
@@ -136,6 +155,7 @@ struct StuffAction: View {
             VStack(spacing: 10) {
                 Text(title)
                     .font(.body)
+                    .foregroundStyle(.black)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
@@ -144,12 +164,13 @@ struct StuffAction: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 50, height: 50)
+                        .foregroundStyle(.black)
                     Spacer()
                 }
            
                 Text(shortDescription)
                     .font(.subheadline)
-                    
+                    .foregroundStyle(.black)
                     .frame(maxWidth: .infinity, alignment: .leading)
              
                 }
@@ -165,7 +186,6 @@ struct StuffAction: View {
 
 
 #Preview {
-    
-    @Previewable @Namespace var namespace
-    StuffActionView(viewModel: .init(item: StuffItem(color: .red, name: "name")), animation: namespace)
+    ContentView()
 }
+
