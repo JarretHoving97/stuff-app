@@ -52,8 +52,9 @@ struct StuffListView: View {
     
     @State private var presentSheet: Bool = false
     @State private var selectedItem: StuffItem?
-    
     @State private var showDetail: Bool = false
+    
+    @State private var detailEnabled: Bool = true
     
     @Namespace private var animation
     
@@ -63,13 +64,18 @@ struct StuffListView: View {
             
             if let selectedItem = viewModel.selectedItem, showDetail {
                 StuffActionView(viewModel: .init(item: selectedItem), animation: animation, onClose: {
-                    withAnimation(.spring(duration: 0.6, bounce: 0.2, blendDuration: 0.2)) {
+                    detailEnabled = false
+                    withAnimation(.spring(duration: 0.2)) {
                         showDetail.toggle()
                     }
                 })
+                
+                .onDisappear {
+                    detailEnabled = true
+                }
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 20) {
+                    VStack(spacing: 20) {
                         ForEach(viewModel.items, id: \.self) { item in
                             CardView(title: item.name)
                                 .matchedGeometryEffect(id: item.id, in: animation)
@@ -85,25 +91,20 @@ struct StuffListView: View {
                                     }
                                 }
                                 .onTapGesture {
+                                    guard detailEnabled else { return }
                                     viewModel.selectItem(item: item)
                                     
-                                    withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.2)) {
+                                    withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.0)) {
                                         showDetail.toggle()
                                     }
                                     
                                 }
-                            
                         }
                     }
                     .padding()
+                    .animation(.default, value: viewModel.items)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    Color("bg_color")
-                        .ignoresSafeArea(.all)
-                )
-           
-                
+            
                 Button {
                     presentSheet.toggle()
                 } label: {
@@ -136,9 +137,13 @@ struct StuffListView: View {
                     await viewModel.retrieve()
                 }
                 
-                .animation(.default, value: viewModel.items)
+             
                 }
             }
+        .background(
+            Color("bg_color")
+                .ignoresSafeArea(.all)
+        )
     }
 }
 

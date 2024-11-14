@@ -27,6 +27,10 @@ struct StuffActionView: View {
     var onClose: (() -> Void)?
 
     @State private var showActions: Bool = false
+    @State private var dragOffSet: CGSize = .zero
+    @State private var viewOffSet: CGSize = .zero
+    
+    @State var didGesture: Bool = false
     
     var body: some View {
         
@@ -41,23 +45,7 @@ struct StuffActionView: View {
                         .foregroundStyle(.white)
                         .bold()
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 24))
-                    
-                    Button {
-                        withAnimation(.spring(duration: 0.6, bounce: 0.2, blendDuration: 0.2)) {
-                            showActions = false
-                        }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            onClose?()
-                        }
-                    
-                    } label: {
-    
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(.white)
                     }
-                }
             
                 
                 ZStack {
@@ -72,8 +60,57 @@ struct StuffActionView: View {
                         .padding()
                     
                 }
+              
+                .offset(x: 0, y: min(viewOffSet.height + dragOffSet.height, 80))
                 .frame(height: 200)
                 .matchedGeometryEffect(id: viewModel.item.id, in: animation)
+                .simultaneousGesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            guard gesture.translation.height > -40 else {
+                                withAnimation(.spring(duration: 0.4)) {
+                                    viewOffSet = .zero
+                                    dragOffSet = .zero
+                                }
+                                return
+                            }
+                            dragOffSet = gesture.translation
+                            
+                            guard gesture.translation.height >= 80, !didGesture else { return }
+                            
+                            let generator = UIImpactFeedbackGenerator(style: .rigid)
+                            generator.impactOccurred()
+                            
+                            didGesture = true
+                        }
+                    
+                        .onEnded { gesture in
+                            
+                            if gesture.translation.height > 50  {
+                    
+                                withAnimation(.spring(duration: 1.3)) {
+                                 
+                                    showActions = false
+                                }
+                                
+                                withAnimation(.spring(duration: 0.1)) {
+                                    viewOffSet = .zero
+                                    dragOffSet = .zero
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    onClose?()
+                                }
+                            } else {
+                                withAnimation(.spring(duration: 0.4)) {
+                                    viewOffSet = .zero
+                                    dragOffSet = .zero
+                                }
+                                didGesture = false
+                            }
+                        }
+                )
+                
             }
             
             VStack(spacing: 0) {
@@ -94,7 +131,7 @@ struct StuffActionView: View {
                         )
                         
                     }
-                    .offset(y: showActions ? 0 : 300)
+                    .offset(y: showActions ? 0 : 600)
                     GridRow {
                         StuffAction(
                             color: .otherItem,
@@ -110,27 +147,23 @@ struct StuffActionView: View {
                             shortDescription: "If not for you, delegate it to someone else."
                         )
                     }
-                    .offset(y: showActions ? 0 : 800)
+                    .offset(y: showActions ? 0 : 1000)
                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: 380)
                 
                 Spacer()
             }
+            .zIndex(-1)
  
             .onAppear {
-              
-                    withAnimation(.spring(duration: 0.6, bounce: 0.2, blendDuration: 0.2)) {
-                        showActions = true
-                    }
-                
+                withAnimation(.spring(duration: 0.6, bounce: 0.2, blendDuration: 0)) {
+                    showActions = true
+                }
             }
-          
-          
-            .background(Color(.bg).clipShape(RoundedRectangle(cornerRadius: 20)))
         }
         .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.bg).ignoresSafeArea(.all))
     }
 }
@@ -146,13 +179,11 @@ struct StuffAction: View {
     var onTap: (() -> Void)?
     
     var body: some View {
-        
-        
         ZStack {
             Color(color)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
            
-            VStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text(title)
                     .font(.body)
                     .foregroundStyle(.black)
@@ -167,7 +198,7 @@ struct StuffAction: View {
                         .foregroundStyle(.black)
                     Spacer()
                 }
-           
+                Spacer(minLength: 2)
                 Text(shortDescription)
                     .font(.subheadline)
                     .foregroundStyle(.black)
