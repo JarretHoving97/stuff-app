@@ -63,16 +63,21 @@ struct StuffListView: View {
         ZStack(alignment: .bottomTrailing) { // Set alignment to bottomTrailing
             
             if let selectedItem = viewModel.selectedItem, showDetail {
-                StuffActionView(viewModel: .init(item: selectedItem), animation: animation, onClose: {
-                    detailEnabled = false
-                    withAnimation(.spring(duration: 0.2)) {
-                        showDetail.toggle()
-                    }
-                })
                 
+                StuffActionView(
+                    viewModel: StuffActionViewModel(item: selectedItem),
+                    onClose: {
+                        detailEnabled = false
+                        withAnimation(.spring(duration: 0.2)) {
+                            showDetail.toggle()
+                        }
+                    },
+                    animation: animation
+                )
                 .onDisappear {
                     detailEnabled = true
                 }
+                
             } else {
                 ScrollView {
                     VStack(spacing: 20) {
@@ -92,19 +97,18 @@ struct StuffListView: View {
                                 }
                                 .onTapGesture {
                                     guard detailEnabled else { return }
-                                    viewModel.selectItem(item: item)
                                     
+                                    viewModel.selectItem(item: item)
                                     withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.0)) {
                                         showDetail.toggle()
                                     }
-                                    
-                                }
+                            }
                         }
                     }
                     .padding()
                     .animation(.default, value: viewModel.items)
                 }
-            
+                
                 Button {
                     presentSheet.toggle()
                 } label: {
@@ -117,7 +121,7 @@ struct StuffListView: View {
                     .clipShape(Circle())
                 }
                 .padding(10)
-            
+                
                 
                 .sheet(isPresented: $presentSheet) {
                     StuffFormView(
@@ -137,9 +141,9 @@ struct StuffListView: View {
                     await viewModel.retrieve()
                 }
                 
-             
-                }
+                
             }
+        }
         .background(
             Color("bg_color")
                 .ignoresSafeArea(.all)

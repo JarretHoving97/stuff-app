@@ -15,6 +15,8 @@ class ManagedStuffItem: NSManagedObject {
     @NSManaged var createdAt: Date
     @NSManaged var state: String
     @NSManaged var rememberDate: Date?
+    
+    @NSManaged var actions: NSSet?
 }
 
 extension ManagedStuffItem {
@@ -33,10 +35,11 @@ extension ManagedStuffItem {
         return try context.fetch(request).first
         
     }
-}
-
-@objc(ManagedStuffAction)
-class ModalStuffAction: NSManagedObject {
-    @NSManaged var id: UUID
-    @NSManaged var actionDescription: String
+    
+    static func add(action: StuffActionModel, to managedItem: ManagedStuffItem, in context: NSManagedObjectContext) throws {
+        let managedAction = ManagedStuffAction.newAction(for: action, in: context)
+        managedAction.stuffItem = managedItem
+        
+        try context.save()
+    }
 }

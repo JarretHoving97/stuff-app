@@ -23,14 +23,14 @@ struct StuffActionView: View {
     var viewModel: StuffActionViewModel
     var onClose: (() -> Void)?
     let animation: Namespace.ID
-
+    
     @State private var showActions: Bool = false
     @State private var dragOffSet: CGSize = .zero
     @State private var viewOffSet: CGSize = .zero
     @State var didGesture: Bool = false
     
     @AppStorage("show_closing_animation") private var showClosingAnimaiton: Bool = true
-
+    
     
     @Environment(\.sizeCategory) var sizeCategory
     
@@ -178,7 +178,7 @@ struct StuffActionView: View {
                                 .resizable()
                                 .frame(width: 30, height: 30)
                                 .foregroundStyle(.red)
-                                
+                            
                         }
                         .frame(height: 60)
                         
@@ -215,7 +215,7 @@ struct StuffActionView: View {
                     
                 }
             }
-        
+            
         }
     }
 }
@@ -255,12 +255,12 @@ struct StuffAction: View {
                         .foregroundStyle(.black)
                     Spacer()
                 }
-              
+                
                 Text(shortDescription)
                     .font(.subheadline)
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                    
+                
                 
             }
             

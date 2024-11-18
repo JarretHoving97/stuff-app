@@ -96,7 +96,7 @@ struct StuffListTests {
     }
     
     func makeRemindedStuffItem(for rememberData: Date = Date().adding(days: 1)) -> StuffItem {
-        StuffItem(id: UUID(), color: .green, name: "Future Item", createdAt: Date(), state: "TODO", rememberDate: rememberData)
+        StuffItem(id: UUID(), color: .green, name: "Future Item", createdAt: Date(), state: "TODO", rememberDate: rememberData, actions: [])
     }
     
     

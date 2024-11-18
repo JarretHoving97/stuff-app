@@ -16,6 +16,8 @@ struct StuffItem: Hashable, Identifiable {
     var state: String
     let rememberDate: Date?
     
+    var actions: [StuffActionModel]
+    
     init(id: UUID = UUID(),color: Color, name: String) {
         self.id = id
         self.color = color
@@ -23,16 +25,18 @@ struct StuffItem: Hashable, Identifiable {
         self.createdAt = Date()
         self.state = "Unremembered"
         self.rememberDate = Date()
+        self.actions = []
         
     }
     
-    init(id: UUID, color: Color, name: String, createdAt: Date, state: String, rememberDate: Date?) {
+    init(id: UUID, color: Color, name: String, createdAt: Date, state: String, rememberDate: Date?, actions: [StuffActionModel]) {
         self.id = id
         self.color = color
         self.name = name
         self.createdAt = createdAt
         self.state = state
         self.rememberDate = rememberDate
+        self.actions = actions
     }
 }
 
@@ -45,6 +49,7 @@ extension StuffItem {
         self.createdAt = managedStuffItem.createdAt
         self.state = managedStuffItem.state
         self.rememberDate = managedStuffItem.rememberDate
+        self.actions = LocalActionsMapper.mapToLocal(managedActions: managedStuffItem.actions?.compactMap {$0 as? ManagedStuffAction} ?? [])
     }
 }
 
@@ -55,5 +60,13 @@ extension StuffItem {
         case done
         case scheduled
         case remembered
+    }
+}
+
+
+public enum LocalActionsMapper {
+
+     static func mapToLocal(managedActions: [ManagedStuffAction] ) -> [StuffActionModel] {
+        return managedActions.map { StuffActionModel(managed: $0 )}
     }
 }

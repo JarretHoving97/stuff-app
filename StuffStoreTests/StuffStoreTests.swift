@@ -115,6 +115,29 @@ struct StuffStoreTests {
         
         try await expect(sut, toRetrieve: [item])
     }
+    
+    @Test func hasEmptyActionsWhenCreatedStuffItem() async throws {
+        let item = makeUniqueItem()
+        
+        try await sut.insert(item)
+        
+        let retrievedItem = try await sut.retrieve().first(where: {$0.id == item.id})
+        
+        #expect(retrievedItem!.actions.isEmpty)
+    }
+    
+    @Test func hasNonEmptyActionsAfterAddedAction() async throws {
+        let item = makeUniqueItem()
+        try await sut.insert(item)
+        
+        let action = StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false)
+        
+        try await sut.add(action: action, to: item.id)
+        
+        let retrievedItem = try await sut.retrieve().first(where: {$0.id == item.id})!
+
+        #expect(retrievedItem.actions == [action])
+    }
 
     // MARK: Helpers
     
@@ -132,3 +155,4 @@ struct StuffStoreTests {
         [makeUniqueItem(with: "a task"), makeUniqueItem(with: "anbother task")]
     }
 }
+

@@ -71,7 +71,7 @@ class CoreDataStuffStore: StuffStore {
     
     func retrieve() async throws -> [StuffItem] {
         guard let items = try ManagedStuffItem.find(in: context) else { throw StoreError.modelNotFound }
-        return items.map { StuffItem(id: $0.id, color: .black, name: $0.name, createdAt: $0.createdAt, state: $0.state, rememberDate: $0.rememberDate) }
+        return items.map { StuffItem(id: $0.id, color: .black, name: $0.name, createdAt: $0.createdAt, state: $0.state, rememberDate: $0.rememberDate, actions: LocalActionsMapper.mapToLocal(managedActions: $0.actions?.compactMap {$0 as? ManagedStuffAction} ?? [])) }
 
     }
 
@@ -95,7 +95,7 @@ class CoreDataStuffStore: StuffStore {
     func delete(_ id: UUID) async throws {
         let context = context
         
-        guard  try ManagedStuffItem.find(id: id, in: context) != nil else {
+        guard try ManagedStuffItem.find(id: id, in: context) != nil else {
             throw StuffStoreError.notFound
         }
         
@@ -103,4 +103,35 @@ class CoreDataStuffStore: StuffStore {
             .map(context.delete)
             .map(context.save)
     }
+    
+    
+    func add(action: StuffActionModel, to item: UUID) async throws {
+        let context = context
+        
+        guard let managedStuffItem = try ManagedStuffItem.find(id: item, in: context) else {
+            throw StuffStoreError.notFound
+        }
+        
+        try ManagedStuffItem.add(action: action, to: managedStuffItem, in: context)
+    }
 }
+
+
+ struct StuffActionModel: Hashable, Identifiable {
+    public let id: UUID
+    let description: String
+    var isCompleted: Bool
+    
+    public init(id: UUID, description: String, isCompleted: Bool) {
+        self.id = id
+        self.description = description
+        self.isCompleted = isCompleted
+    }
+    
+    public init(managed: ManagedStuffAction) {
+        self.id = managed.id
+        self.description = managed.actionDescription
+        self.isCompleted = managed.isCompleted
+    }
+}
+
