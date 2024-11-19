@@ -44,7 +44,6 @@ struct StuffStoreTests {
         try await expect(sut, toRetrieve: items)
     }
     
-    
     @Test func errorsWhenAddingDuplicateItem() async throws {
         let item = makeUniqueItem()
         let sameNameItem = StuffItem(id: item.id, color: .black, name: "an other name")
@@ -121,9 +120,9 @@ struct StuffStoreTests {
         
         try await sut.insert(item)
         
-        let retrievedItem = try await sut.retrieve().first(where: {$0.id == item.id})
+        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})?.actions
         
-        #expect(retrievedItem!.actions.isEmpty)
+        #expect(retrievedActions == [])
     }
     
     @Test func hasNonEmptyActionsAfterAddedAction() async throws {
@@ -134,14 +133,61 @@ struct StuffStoreTests {
         
         try await sut.add(action: action, to: item.id)
         
-        let retrievedItem = try await sut.retrieve().first(where: {$0.id == item.id})!
+        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})?.actions
 
-        #expect(retrievedItem.actions == [action])
+        #expect(retrievedActions == [action])
+    }
+    
+    @Test func storesMultipleActions() async throws {
+        let item = makeUniqueItem()
+        try await sut.insert(item)
+        
+        let localActions: [StuffActionModel] = [
+            StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false),
+            StuffActionModel(id: UUID(), description: "Something else to do", isCompleted: false),
+            StuffActionModel(id: UUID(), description: "Something to do tomorrow", isCompleted: false),
+            StuffActionModel(id: UUID(), description: "Something to do today", isCompleted: false),
+        ]
+        
+        for action in localActions {
+            try await sut.add(action: action, to: item.id)
+        }
+    
+        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})!.actions
+    
+        #expect(retrievedActions == localActions)
+    }
+
+    @Test func didSetActionAsCompleted() async throws {
+        let item = makeUniqueItem()
+        try await sut.insert(item)
+        
+        let action = StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false)
+        
+        try await sut.add(action: action, to: item.id)
+        try await sut.setCompleted(action.id, isCompleted: true)
+        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})!.actions
+        
+        #expect(retrievedActions.first?.isCompleted == true)
+    }
+    
+    @Test func deletesAction() async throws {
+        let item = makeUniqueItem()
+        try await sut.insert(item)
+        
+        let action = StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false)
+        
+        try await sut.add(action: action, to: item.id)
+        try await sut.delete(action: action.id)
+        
+        let actions = try await sut.retrieve().first?.actions
+        
+        #expect(actions == [])
     }
 
     // MARK: Helpers
     
-    private func expect(_ sut: StuffStore, toRetrieve expectedStuff: [StuffItem],    fileID: String = #fileID, filePath: String = #filePath, line: Int = #line, column: Int = #column) async throws {
+    private func expect(_ sut: StuffStore, toRetrieve expectedStuff: [StuffItem], fileID: String = #fileID, filePath: String = #filePath, line: Int = #line, column: Int = #column) async throws {
         let retrievedStuff = try await sut.retrieve()
         
         #expect(retrievedStuff == expectedStuff, sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column))

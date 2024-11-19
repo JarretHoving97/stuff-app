@@ -17,7 +17,6 @@ struct StuffListTests {
     
     private func makeSUT() -> (sut: StuffListViewModel, store: StuffStoreSpy ) {
         let store = StuffStoreSpy()
-        
         let sut = StuffListViewModel(store: store)
         
         return (sut, store)
@@ -42,7 +41,6 @@ struct StuffListTests {
         
         try await store.insert(stuffItem)
         await sut.retrieve()
-        
         
         #expect(store.messages == [.insert(stuffItem), .retrieve])
         #expect(sut.items == [stuffItem])
@@ -79,7 +77,6 @@ struct StuffListTests {
         
         #expect(sut.items == [rememberedStuffItem])
     }
-    
     
     @Test func doesShowStuffThatHasNoRememberDateSet() async throws {
         let (sut, store) = makeSUT()

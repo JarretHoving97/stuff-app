@@ -114,6 +114,27 @@ class CoreDataStuffStore: StuffStore {
         
         try ManagedStuffItem.add(action: action, to: managedStuffItem, in: context)
     }
+    
+    func setCompleted(_ id: UUID, isCompleted: Bool) async throws {
+        let context = context
+        
+        guard let managedAction = try ManagedStuffAction.find(for: id, in: context) else {
+            throw StuffStoreError.notFound
+        }
+        
+        managedAction.isCompleted = isCompleted
+        
+        try context.save()
+    }
+    
+    func delete(action id: UUID) async throws {
+        let context = context
+        
+        try ManagedStuffAction.find(for: id, in: context)
+            .map(context.delete)
+            .map(context.save)
+        
+    }
 }
 
 
