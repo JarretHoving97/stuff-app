@@ -11,9 +11,8 @@ import Foundation
 import SwiftUI
 
 
-
 @MainActor
-struct StuffListTests {
+struct StuffListPresentationTests {
     
     private func makeSUT() -> (sut: StuffListViewModel, store: StuffStoreSpy ) {
         let store = StuffStoreSpy()
