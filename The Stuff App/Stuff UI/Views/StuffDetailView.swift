@@ -7,17 +7,7 @@
 
 import SwiftUI
 
-@Observable
-class StuffActionViewModel {
-    
-    let item: StuffItem
-    
-    init(item: StuffItem) {
-        self.item = item
-    }
-}
-
-struct StuffActionView: View {
+struct StuffDetailView: View {
     
     var viewModel: StuffActionViewModel
     var onClose: (() -> Void)?
@@ -128,14 +118,14 @@ struct StuffActionView: View {
             VStack(spacing: 30) {
                 Grid(horizontalSpacing: 10, verticalSpacing: 10) {
                     GridRow {
-                        StuffAction(
+                        StuffActionView(
                             color: .contentSecondary,
                             icon: Image(systemName: "checkmark.circle"),
                             title: "Do it now",
                             shortDescription: "If this task can be done within two minutes do it now!"
                         )
                         
-                        StuffAction(
+                        StuffActionView(
                             color: .otherItemColor1,
                             icon: Image(systemName: "clock.badge"),
                             title: "Do it later",
@@ -145,14 +135,14 @@ struct StuffActionView: View {
                     }
                     .offset(y: showActions ? 0 : 600)
                     GridRow {
-                        StuffAction(
+                        StuffActionView(
                             color: .otherItem,
                             icon: Image(systemName: "calendar.badge.checkmark"),
                             title: "Schedule",
                             shortDescription: "Schedule this item for a date when you want to do it"
                         )
                         
-                        StuffAction(
+                        StuffActionView(
                             color: .contentPrimary,
                             icon: Image(systemName: "point.3.filled.connected.trianglepath.dotted"),
                             title: "Delegate",
@@ -220,7 +210,7 @@ struct StuffActionView: View {
 }
 
 
-struct StuffAction: View {
+struct StuffActionView: View {
     
     let color: Color
     let icon: Image
@@ -277,6 +267,6 @@ struct StuffAction: View {
     
     @Previewable @Namespace var animation
     
-    return StuffActionView(viewModel: StuffActionViewModel(item: StuffItem(color: .accent, name: "Something to do")), animation: animation)
+    return StuffDetailView(viewModel: StuffActionViewModel(item: StuffItem(color: .accent, name: "Something to do")), animation: animation)
 }
 

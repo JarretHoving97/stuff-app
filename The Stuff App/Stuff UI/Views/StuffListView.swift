@@ -8,44 +8,6 @@
 
 import SwiftUI
 
-
-@MainActor
-@Observable class StuffListViewModel {
-    
-    private(set) var items = [StuffItem]()
-    
-    var selectedItem: StuffItem?
-    
-    var store: StuffStore
-    
-    init(store: StuffStore) {
-        self.store = store
-    }
-    
-    func selectItem(item: StuffItem) {
-        selectedItem = item
-    }
-    
-    func removeItem() {
-        selectedItem = nil
-    }
-    
-    func retrieve(for date: Date = Date()) async {
-        let stuff = try? await store.retrieve()
-        self.items = stuff?
-            .filter { item in return date.isInPastOrToday(date: item.rememberDate) } ?? []
-    }
-    
-    func delete(_ item: UUID) async {
-        try? await store.delete(item)
-    }
-    
-    func add(_ item: StuffItem) async {
-        try? await store.insert(item)
-    }
-}
-
-
 struct StuffListView: View {
     
     var viewModel: StuffListViewModel
@@ -64,7 +26,7 @@ struct StuffListView: View {
             
             if let selectedItem = viewModel.selectedItem, showDetail {
                 
-                StuffActionView(
+                StuffDetailView(
                     viewModel: StuffActionViewModel(item: selectedItem),
                     onClose: {
                         detailEnabled = false
@@ -124,7 +86,7 @@ struct StuffListView: View {
                 
                 
                 .sheet(isPresented: $presentSheet) {
-                    StuffFormView(
+                    AddStuffItemView(
                         presentSheet: $presentSheet) { name in
                             Task {
                                 await viewModel.add(StuffItem(id: UUID(), color: .bg, name: name))
@@ -151,80 +113,13 @@ struct StuffListView: View {
     }
 }
 
-struct CardView: View {
-    
-    let title: String
-    
-    var body: some View {
-        ZStack {
-            Text(title)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-                .font(.headline)
-                .lineLimit(4, reservesSpace: false)
-                .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-                .padding()
-        }
-        .frame(maxWidth: .infinity)
-        .background(Color("item_primary_color"))
-        .cornerRadius(14)
-        
-    }
-}
-
-
-struct StuffFormView: View {
-    
-    @State private var name: String = ""
-    @Binding var presentSheet: Bool
-    
-    var onAddButtonTapped: ((String) -> Void)
-    
-    var body: some View {
-        
-        VStack {
-            HStack {
-                Spacer()
-                Button("add") {
-                    onAddButtonTapped(name)
-                    presentSheet.toggle()
-                }
-            }
-            
-            TextField("", text: $name)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-                .padding()
-                .background(Color.black.opacity(0.4))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            
-        }
-        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("item_secondary_color"))
-    }
-}
-
 #Preview {
     
     StuffListView(
         viewModel: StuffListViewModel(
-            store: MockStore()
+            store: MOCK_STORE()
         )
     )
 }
 
 
-extension Date {
-    
-    public func isInPastOrToday(date: Date?) -> Bool {
-        guard let date else { return true }
-        return date.isInSame(.day, as: self) || self >= date
-    }
-    
-    public func isInSame(_ component: Calendar.Component, as date: Date) -> Bool {
-        return Calendar.current.isDate(self, equalTo: date, toGranularity: component)
-    }
-}

@@ -9,6 +9,13 @@ import Foundation
 import SwiftUI
 
 struct StuffItem: Hashable, Identifiable {
+    
+    enum State: String {
+        case done
+        case scheduled
+        case remembered
+    }
+    
     let id: UUID
     var color: Color
     var name: String
@@ -17,18 +24,7 @@ struct StuffItem: Hashable, Identifiable {
     let rememberDate: Date?
     
     var actions: [StuffActionModel]
-    
-    init(id: UUID = UUID(),color: Color, name: String) {
-        self.id = id
-        self.color = color
-        self.name = name
-        self.createdAt = Date()
-        self.state = "Unremembered"
-        self.rememberDate = Date()
-        self.actions = []
-        
-    }
-    
+
     init(id: UUID, color: Color, name: String, createdAt: Date, state: String, rememberDate: Date?, actions: [StuffActionModel]) {
         self.id = id
         self.color = color
@@ -51,22 +47,15 @@ extension StuffItem {
         self.rememberDate = managedStuffItem.rememberDate
         self.actions = LocalActionsMapper.mapToLocal(managedActions: managedStuffItem.actions?.compactMap {$0 as? ManagedStuffAction} ?? [])
     }
-}
-
-
-extension StuffItem {
     
-    enum State: String {
-        case done
-        case scheduled
-        case remembered
-    }
-}
-
-
-public enum LocalActionsMapper {
-
-     static func mapToLocal(managedActions: [ManagedStuffAction] ) -> [StuffActionModel] {
-        return managedActions.map { StuffActionModel(managed: $0 )}
+    init(id: UUID = UUID(), color: Color, name: String) {
+        self.id = id
+        self.color = color
+        self.name = name
+        self.createdAt = Date()
+        self.state = "Unremembered"
+        self.rememberDate = Date()
+        self.actions = []
+        
     }
 }

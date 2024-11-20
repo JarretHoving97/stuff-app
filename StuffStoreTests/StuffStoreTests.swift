@@ -119,8 +119,6 @@ struct StuffStoreTests {
         
         try await sut.insert(item)
         
-        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})?.actions
-        
         try await expect(sut, toRetrieve: [], for: item)
     }
     
@@ -197,7 +195,6 @@ struct StuffStoreTests {
             StuffActionModel(id: UUID(), description: "Something to do tomorrow", isCompleted: false),
             StuffActionModel(id: UUID(), description: "Something to do today", isCompleted: false),
         ]
-        
     }
 }
 

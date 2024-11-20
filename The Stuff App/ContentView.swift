@@ -11,7 +11,7 @@ struct ContentView: View {
     var body: some View {
         StuffListView(
             viewModel: StuffListViewModel(
-                store: MockStore()
+                store: MOCK_STORE()
             )
         )
     }
@@ -19,37 +19,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-}
-
-
-class MockStore: StuffStore {
- 
-    var items = [StuffItem]()
-    
-    init() {
-        items = [
-            StuffItem(color: .accentColor, name: "Yes"),
-            StuffItem(id: UUID(), color: .gray, name: "Noo i dont want to do this"),
-        ]
-    }
-    
-    func insert(_ item: StuffItem) async throws {
-        items.append(item)
-    }
-    
-    func retrieve() async throws -> [StuffItem] {
-        return items
-    }
-    
-    func delete(_ id: UUID) async throws {
-        items.removeAll(where: {$0.id == id})
-    }
-    
-    func delete(action id: UUID) async throws {}
-    
-    func update(_ id: UUID, with item: StuffItem) async throws {}
-    
-    func add(action: StuffActionModel, to item: UUID) async throws {}
-    
-    func setCompleted(_ id: UUID, isCompleted: Bool) async throws {}
 }
