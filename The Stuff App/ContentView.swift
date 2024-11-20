@@ -23,7 +23,7 @@ struct ContentView: View {
 
 
 class MockStore: StuffStore {
-    
+ 
     var items = [StuffItem]()
     
     init() {
@@ -45,7 +45,11 @@ class MockStore: StuffStore {
         items.removeAll(where: {$0.id == id})
     }
     
-    func update(_ id: UUID, with item: StuffItem) async throws {
-        
-    }
+    func delete(action id: UUID) async throws {}
+    
+    func update(_ id: UUID, with item: StuffItem) async throws {}
+    
+    func add(action: StuffActionModel, to item: UUID) async throws {}
+    
+    func setCompleted(_ id: UUID, isCompleted: Bool) async throws {}
 }

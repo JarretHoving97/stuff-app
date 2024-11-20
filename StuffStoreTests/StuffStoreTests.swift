@@ -9,7 +9,6 @@ import Testing
 import Foundation
 @testable import The_Stuff_App
 
-
 struct StuffStoreTests {
     
     let sut = try! CoreDataStuffStore(storeURL: URL(fileURLWithPath: "/dev/null"))
@@ -122,7 +121,7 @@ struct StuffStoreTests {
         
         let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})?.actions
         
-        #expect(retrievedActions == [])
+        try await expect(sut, toRetrieve: [], for: item)
     }
     
     @Test func hasNonEmptyActionsAfterAddedAction() async throws {
@@ -132,30 +131,18 @@ struct StuffStoreTests {
         let action = StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false)
         
         try await sut.add(action: action, to: item.id)
-        
-        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})?.actions
-
-        #expect(retrievedActions == [action])
+        try await expect(sut, toRetrieve: [action], for: item)
     }
     
     @Test func storesMultipleActions() async throws {
         let item = makeUniqueItem()
         try await sut.insert(item)
-        
-        let localActions: [StuffActionModel] = [
-            StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false),
-            StuffActionModel(id: UUID(), description: "Something else to do", isCompleted: false),
-            StuffActionModel(id: UUID(), description: "Something to do tomorrow", isCompleted: false),
-            StuffActionModel(id: UUID(), description: "Something to do today", isCompleted: false),
-        ]
-        
+        let localActions = makeUniqueActions()
+
         for action in localActions {
             try await sut.add(action: action, to: item.id)
         }
-    
-        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})!.actions
-    
-        #expect(retrievedActions == localActions)
+        try await expect(sut, toRetrieve: localActions, for: item)
     }
 
     @Test func didSetActionAsCompleted() async throws {
@@ -166,9 +153,9 @@ struct StuffStoreTests {
         
         try await sut.add(action: action, to: item.id)
         try await sut.setCompleted(action.id, isCompleted: true)
-        let retrievedActions = try await sut.retrieve().first(where: {$0.id == item.id})!.actions
         
-        #expect(retrievedActions.first?.isCompleted == true)
+        let expectedResult = [StuffActionModel(id: action.id, description: action.description, isCompleted: true)]
+        try await expect(sut, toRetrieve: expectedResult, for: item)
     }
     
     @Test func deletesAction() async throws {
@@ -180,17 +167,19 @@ struct StuffStoreTests {
         try await sut.add(action: action, to: item.id)
         try await sut.delete(action: action.id)
         
-        let actions = try await sut.retrieve().first?.actions
-        
-        #expect(actions == [])
+       try await expect(sut, toRetrieve: [], for: item)
     }
 
     // MARK: Helpers
     
     private func expect(_ sut: StuffStore, toRetrieve expectedStuff: [StuffItem], fileID: String = #fileID, filePath: String = #filePath, line: Int = #line, column: Int = #column) async throws {
         let retrievedStuff = try await sut.retrieve()
-        
         #expect(retrievedStuff == expectedStuff, sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column))
+    }
+    
+    private func expect(_ sut: StuffStore, toRetrieve expectedActions: [StuffActionModel], for stuffItem: StuffItem, fileID: String = #fileID, filePath: String = #filePath, line: Int = #line, column: Int = #column) async throws {
+        let retrievedActions = try await sut.retrieve().first(where: {$0.id == stuffItem.id})?.actions
+        #expect(retrievedActions == expectedActions, sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column))
     }
     
     private func makeUniqueItem(with name: String = "A task to do") -> StuffItem {
@@ -199,6 +188,16 @@ struct StuffStoreTests {
     
     private func makeUniqueItems() -> [StuffItem] {
         [makeUniqueItem(with: "a task"), makeUniqueItem(with: "anbother task")]
+    }
+    
+    private func makeUniqueActions() -> [StuffActionModel] {
+        return [
+            StuffActionModel(id: UUID(), description: "Something to do", isCompleted: false),
+            StuffActionModel(id: UUID(), description: "Something else to do", isCompleted: false),
+            StuffActionModel(id: UUID(), description: "Something to do tomorrow", isCompleted: false),
+            StuffActionModel(id: UUID(), description: "Something to do today", isCompleted: false),
+        ]
+        
     }
 }
 

@@ -15,7 +15,6 @@ class StuffActionViewModel {
     init(item: StuffItem) {
         self.item = item
     }
-    
 }
 
 struct StuffActionView: View {

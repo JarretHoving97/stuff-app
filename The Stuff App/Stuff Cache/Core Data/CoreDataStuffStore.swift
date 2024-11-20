@@ -133,7 +133,6 @@ class CoreDataStuffStore: StuffStore {
         try ManagedStuffAction.find(for: id, in: context)
             .map(context.delete)
             .map(context.save)
-        
     }
 }
 

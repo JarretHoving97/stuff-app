@@ -98,7 +98,7 @@ struct StuffListTests {
     
     
     class StuffStoreSpy: StuffStore {
-        
+     
         enum ReceivedMessage: Equatable {
             case update(UUID, StuffItem)
             case insert(StuffItem)
@@ -127,6 +127,12 @@ struct StuffListTests {
         func update(_ id: UUID, with item: StuffItem) async throws {
             messages.append(.update(id, item))
         }
+        
+        func delete(action id: UUID) async throws {}
+        
+        func add(action: The_Stuff_App.StuffActionModel, to item: UUID) async throws {}
+        
+        func setCompleted(_ id: UUID, isCompleted: Bool) async throws {}
     }
 }
 

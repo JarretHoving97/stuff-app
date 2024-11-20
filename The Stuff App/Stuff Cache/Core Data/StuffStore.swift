@@ -18,4 +18,8 @@ protocol StuffStore {
     func retrieve() async throws -> [StuffItem]
     func delete(_ id: UUID) async throws
     func update(_ id: UUID, with item: StuffItem) async throws
+    
+    func add(action: StuffActionModel, to item: UUID) async throws
+    func setCompleted(_ id: UUID, isCompleted: Bool) async throws
+    func delete(action id: UUID) async throws
 }
