@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct AddStuffItemView: View {
     
     @State private var name: String = ""

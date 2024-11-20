@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-@Observable
 class StuffActionViewModel {
+    
+    @AppStorage("show_closing_animation") var showClosingAnimaiton: Bool = true
     
     let item: StuffItem
     

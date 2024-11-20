@@ -18,9 +18,6 @@ struct StuffDetailView: View {
     @State private var viewOffSet: CGSize = .zero
     @State var didGesture: Bool = false
     
-    @AppStorage("show_closing_animation") private var showClosingAnimaiton: Bool = true
-    
-    
     @Environment(\.sizeCategory) var sizeCategory
     
     var body: some View {
@@ -100,7 +97,7 @@ struct StuffDetailView: View {
                                 }
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    showClosingAnimaiton = false // never show repeating animation again
+                                    viewModel.showClosingAnimaiton = false // never show repeating animation again
                                     onClose?()
                                 }
                             } else {
@@ -194,7 +191,7 @@ struct StuffDetailView: View {
         .onAppear {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                if showClosingAnimaiton {
+                if viewModel.showClosingAnimaiton {
                     withAnimation(
                         Animation.easeInOut(duration: 0.7)
                             .repeatForever(autoreverses: true) // Repeat 3 times
@@ -208,60 +205,6 @@ struct StuffDetailView: View {
         }
     }
 }
-
-
-struct StuffActionView: View {
-    
-    let color: Color
-    let icon: Image
-    let title: String
-    let shortDescription: String
-    
-    var onTap: (() -> Void)?
-    
-    // Detect compact or regular size class
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    var body: some View {
-        let isCompact = UIScreen.main.bounds.height <= 736
-        
-        ZStack {
-            Color(color)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text(title)
-                    .font(.body)
-                    .foregroundStyle(.black)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .bold()
-                HStack {
-                    icon
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: isCompact ? 40 : 50, height: isCompact ? 40 : 50)
-                        .foregroundStyle(.black)
-                    Spacer()
-                }
-                
-                Text(shortDescription)
-                    .font(.subheadline)
-                    .foregroundStyle(.black)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                
-                
-            }
-            
-            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 10))
-        }
-        .onTapGesture {
-            onTap?()
-        }
-    }
-}
-
-
 
 #Preview {
     
