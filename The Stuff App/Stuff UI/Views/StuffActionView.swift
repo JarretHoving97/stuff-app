@@ -16,11 +16,7 @@ struct StuffActionView: View {
     
     var onTap: (() -> Void)?
     
-    // Detect compact or regular size class
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
     var body: some View {
-        let isCompact = UIScreen.main.bounds.height <= 736
         
         ZStack {
             Color(color)
@@ -30,6 +26,7 @@ struct StuffActionView: View {
                 Text(title)
                     .font(.body)
                     .foregroundStyle(.black)
+                    .minimumScaleFactor(0.01)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bold()
@@ -37,7 +34,7 @@ struct StuffActionView: View {
                     icon
                         .resizable()
                         .scaledToFit()
-                        .frame(width: isCompact ? 40 : 50, height: isCompact ? 40 : 50)
+                        .frame(width: 50, height: 50)
                         .foregroundStyle(.black)
                     Spacer()
                 }
@@ -45,10 +42,11 @@ struct StuffActionView: View {
                 Text(shortDescription)
                     .font(.subheadline)
                     .foregroundStyle(.black)
+                    .minimumScaleFactor(0.01)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
                 }
             
-            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 10))
+            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
         }
         .onTapGesture {
             onTap?()

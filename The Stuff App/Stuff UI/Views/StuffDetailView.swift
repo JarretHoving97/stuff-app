@@ -27,7 +27,8 @@ struct StuffDetailView: View {
         VStack(spacing: 20) {
             VStack(spacing: 20) {
                 Text("What you'd like to do with this item?")
-                    .font(isCompact ? .title : .title)
+                    .font(.title)
+                    .minimumScaleFactor(0.01)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 80)
                     .lineLimit(3, reservesSpace: false)
@@ -43,11 +44,11 @@ struct StuffDetailView: View {
                         .foregroundStyle(.white)
                         .frame(alignment: .leading)
                         .font(.title)
+                        .minimumScaleFactor(0.01)
                         .fontWeight(.semibold)
                         .padding()
-                    
-                    
-                    // Bottom-aligned RoundedRectangle
+
+                    // n
                     VStack {
                         Spacer() // Pushes the RoundedRectangle to the bottom
                         RoundedRectangle(cornerRadius: 12)
@@ -55,17 +56,14 @@ struct StuffDetailView: View {
                             .padding(.bottom, 8)// Optional padding if needed
                             .foregroundStyle(Color.black.opacity(0.4))
                     }
-                    
-                    
                 }
-                
                 .offset(x: 0, y: min(viewOffSet.height + dragOffSet.height, 80))
                 .frame(height: isCompact ? 150 : 190)
                 .matchedGeometryEffect(id: viewModel.item.id, in: animation)
                 .simultaneousGesture(
                     DragGesture()
                         .onChanged { gesture in
-                            guard gesture.translation.height > -40 else {
+                            guard gesture.translation.height > -100 else {
                                 withAnimation(.spring(duration: 0.4)) {
                                     viewOffSet = .zero
                                     dragOffSet = .zero
@@ -74,7 +72,7 @@ struct StuffDetailView: View {
                             }
                             dragOffSet = gesture.translation
                             
-                            guard gesture.translation.height >= 50, !didGesture else { return }
+                            guard gesture.translation.height >= 80, !didGesture else { return }
                             
                             let generator = UIImpactFeedbackGenerator(style: .rigid)
                             generator.impactOccurred()
@@ -110,81 +108,18 @@ struct StuffDetailView: View {
                         }
                 )
                 
+                actionsGridView
             }
-            
-            VStack(spacing: 30) {
-                Grid(horizontalSpacing: 10, verticalSpacing: 10) {
-                    GridRow {
-                        StuffActionView(
-                            color: .contentSecondary,
-                            icon: Image(systemName: "checkmark.circle"),
-                            title: "Do it now",
-                            shortDescription: "If this task can be done within two minutes do it now!"
-                        )
-                        
-                        StuffActionView(
-                            color: .otherItemColor1,
-                            icon: Image(systemName: "clock.badge"),
-                            title: "Do it later",
-                            shortDescription: "Let this item show up again on another time"
-                        )
-                        
-                    }
-                    .offset(y: showActions ? 0 : 600)
-                    GridRow {
-                        StuffActionView(
-                            color: .otherItem,
-                            icon: Image(systemName: "calendar.badge.checkmark"),
-                            title: "Schedule",
-                            shortDescription: "Schedule this item for a date when you want to do it"
-                        )
-                        
-                        StuffActionView(
-                            color: .contentPrimary,
-                            icon: Image(systemName: "point.3.filled.connected.trianglepath.dotted"),
-                            title: "Delegate",
-                            shortDescription: "If not for you, delegate it to someone else."
-                        )
-                    }
-                    .offset(y: showActions ? 0 : 1000)
-                    
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: isCompact ? 340 : 380)
-                
-                if !isCompact {
-                    
-                    Button {} label: {
-                        ZStack {
-                            Color(.black.withAlphaComponent(0.2))
-                                .cornerRadius(20)
-                            
-                            
-                            Image(systemName: "xmark.bin")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundStyle(.red)
-                            
-                        }
-                        .frame(height: 60)
-                        
-                    }
-                    .offset(y: showActions ? 0 : 1400)
-                    
-                    Spacer()
-                }
-                
-                
-            }
-            .zIndex(-1)
-            
+        
             .onAppear {
                 withAnimation(.spring(duration: 0.6, bounce: 0.2)) {
                     showActions = true
                 }
             }
+            
+            Spacer()
         }
-        .padding(EdgeInsets(top: 40, leading: 20, bottom: 20, trailing: 20))
+        .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.bg).ignoresSafeArea(.all))
         
@@ -204,7 +139,56 @@ struct StuffDetailView: View {
             
         }
     }
+    
+    private var actionsGridView: some View {
+        VStack(spacing: 30) {
+            Grid(horizontalSpacing: 10, verticalSpacing: 10) {
+                GridRow {
+                
+                    StuffActionView(
+                        color: .hilightedItem,
+                        icon: Image(systemName: "hand.point.up.left.and.text.fill"),
+                        title: "Take action",
+                        shortDescription: "Write down actions, schedule them or review them"
+                    )
+                
+                    StuffActionView(
+                        color: .contentSecondary,
+                        icon: Image(systemName: "checkmark.circle"),
+                        title: "Mark as completed",
+                        shortDescription: "You already completed this task!"
+                    )
+                
+                    
+                }
+                .offset(y: showActions ? 0 : 600)
+                
+                GridRow {
+                    StuffActionView(
+                        color: .otherItem,
+                        icon: Image(systemName: "clock.badge"),
+                        title: "Appear another time",
+                        shortDescription: "Not for now, I'll probably need to do this later."
+                    )
+                    
+                    StuffActionView(
+                        color: .red.opacity(0.8),
+                        icon: Image(systemName: "trash.fill"),
+                        title: "Move to trash",
+                        shortDescription: "When it's not actionable, better delete it"
+                    )
+            
+                }
+                .offset(y: showActions ? 0 : 1000)
+                
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .zIndex(-1)
+        .frame(minHeight: 360)
+    }
 }
+
 
 #Preview {
     
