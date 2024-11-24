@@ -39,6 +39,11 @@ class ReviewDashboardViewModel {
         setTilteView(with: actions)
     }
     
+    public func setTaskCompleted(for action: UUID, isCompleted: Bool) async {
+        try? await actionLoader?.setCompleted(action, isCompleted: isCompleted)
+        await reload()
+    }
+    
     private func motivationalTitle(for actions: [StuffActionModel]) -> String {
         if actions.isEmpty {
             return ReviewDashboardViewModel.NO_ACTIONS_TITLE
@@ -58,12 +63,8 @@ class ReviewDashboardViewModel {
         return ReviewDashboardViewModel.TASK_ALMOST_DONE
     }
     
-    func setTaskCompleted(for action: UUID, isCompleted: Bool) async {
-        try? await actionLoader?.setCompleted(action, isCompleted: isCompleted)
-        await reload()
-    }
-    
-    func reload() async {
+ 
+    private func reload() async {
         let actions = try? await actionLoader?.retrieve(for: item.id)
         self.setTilteView(with: actions ?? [])
         self.actions = actions ?? []
