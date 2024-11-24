@@ -48,14 +48,14 @@ extension StuffItem {
         self.actions = LocalActionsMapper.mapToLocal(managedActions: managedStuffItem.actions?.compactMap {$0 as? ManagedStuffAction} ?? [])
     }
     
-    init(id: UUID = UUID(), color: Color, name: String) {
+    init(id: UUID = UUID(), color: Color, name: String, actions: [StuffActionModel] = []) {
         self.id = id
         self.color = color
         self.name = name
         self.createdAt = Date()
         self.state = "Unremembered"
         self.rememberDate = Date()
-        self.actions = []
+        self.actions = actions
         
     }
 }

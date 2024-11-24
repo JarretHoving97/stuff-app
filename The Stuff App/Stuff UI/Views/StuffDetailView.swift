@@ -98,8 +98,8 @@ struct StuffDetailView: View {
                     
                     guard gesture.translation.height >= 80, !didGesture else { return }
                     
-                    let generator = UIImpactFeedbackGenerator(style: .rigid)
-                    generator.impactOccurred()
+                    // TODO: Impact if iOS
+        
                     
                     didGesture = true
                 }
