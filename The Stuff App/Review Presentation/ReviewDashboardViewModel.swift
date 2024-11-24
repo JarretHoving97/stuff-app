@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class ReviewDashboardViewModel {
+public class ReviewDashboardViewModel {
 
     // TODO: Translations
     public static let NO_ACTIONS_TITLE = "Add actions to complete this task"
@@ -38,6 +38,7 @@ class ReviewDashboardViewModel {
     }
     
     public func setTaskCompleted(for action: UUID, isCompleted: Bool) async {
+        
         try? await actionLoader?.setCompleted(action, isCompleted: isCompleted)
         await reload()
     }
@@ -64,8 +65,10 @@ class ReviewDashboardViewModel {
  
     private func reload() async {
         let actions = try? await actionLoader?.retrieve(for: item.id)
-        self.setTilteView(with: actions ?? [])
-        self.actions = actions ?? []
+        withAnimation {
+            self.setTilteView(with: actions ?? [])
+            self.actions = actions ?? []
+        }
     }
     
     private func setTilteView(with actions: [StuffActionModel]) {
