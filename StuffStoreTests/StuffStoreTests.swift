@@ -167,6 +167,19 @@ struct StuffStoreTests {
         
        try await expect(sut, toRetrieve: [], for: item)
     }
+    
+    @Test func retrievesAllActionsForStuffItem() async throws {
+        let item = makeUniqueItem()
+        try await sut.insert(item)
+        let localActions = makeUniqueActions()
+
+        for action in localActions {
+            try await sut.add(action: action, to: item.id)
+        }
+        
+        let retrievedActions = try await sut.retrieve(for: item.id)
+        #expect(retrievedActions == localActions)
+    }
 
     // MARK: Helpers
     

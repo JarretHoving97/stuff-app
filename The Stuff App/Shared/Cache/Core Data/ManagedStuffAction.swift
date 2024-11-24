@@ -34,4 +34,11 @@ extension ManagedStuffAction: Identifiable {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         return try context.fetch(request).first
     }
+    
+    static func findAll(for item: UUID, in context: NSManagedObjectContext) throws -> [ManagedStuffAction] {
+        let request = NSFetchRequest<ManagedStuffAction>(entityName: entity().name!)
+        request.returnsObjectsAsFaults = false
+        request.predicate = NSPredicate(format: "stuffItem.id == %@", item as CVarArg)
+        return try context.fetch(request)
+    }
 }

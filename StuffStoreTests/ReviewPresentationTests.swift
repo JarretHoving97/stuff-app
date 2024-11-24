@@ -17,18 +17,15 @@ class ReviewDashboardViewModel {
     public static let NO_ACTIONS_TITLE = "Add actions to complete this task"
     public static let WHAT_ACTIONS_FOR_TODAY = "What actions do you want to take for today?"
     public static let TASK_ALMOST_DONE = "This task is almost done!"
+    public static let TASK_IS_COMPLETED = "Great Job, You've completed this task!"
     
     var itemTitle: String {
         return item.name
     }
     
-    var actions: [StuffActionModel] {
-        return item.actions
-    }
+    var motivationTitle: String = ""
     
-    var motivationTitle: String {
-        return motivationalTitle(for: item.actions)
-    }
+    private(set) var actions: [StuffActionModel]
     
     private var item: StuffItem
     
@@ -36,7 +33,10 @@ class ReviewDashboardViewModel {
     
     init(item: StuffItem, actionLoader: StuffActionStore?) {
         self.actionLoader = actionLoader
+        self.actions = item.actions
         self.item = item
+        
+        setTilteView(with: actions)
     }
     
     private func motivationalTitle(for actions: [StuffActionModel]) -> String {
@@ -50,14 +50,32 @@ class ReviewDashboardViewModel {
         if completedPercentage < 80 {
             return ReviewDashboardViewModel.WHAT_ACTIONS_FOR_TODAY
         }
+        
+        if completedPercentage == 100 {
+            return ReviewDashboardViewModel.TASK_IS_COMPLETED
+        }
 
         return ReviewDashboardViewModel.TASK_ALMOST_DONE
+    }
+    
+    func setTaskCompleted(for action: UUID, isCompleted: Bool) async {
+        try? await actionLoader?.setCompleted(action, isCompleted: isCompleted)
+        await reload()
+    }
+    
+    func reload() async {
+        let actions = try? await actionLoader?.retrieve(for: item.id)
+        self.setTilteView(with: actions ?? [])
+        self.actions = actions ?? []
+    }
+    
+    private func setTilteView(with actions: [StuffActionModel]) {
+        motivationTitle = motivationalTitle(for: actions)
     }
 }
 
 @MainActor
 struct ReviewPresentationTests {
-    
     
     @Test func appearsWithEmptyActions() {
         let sut = makeSUT()
@@ -85,10 +103,33 @@ struct ReviewPresentationTests {
         #expect(sut.motivationTitle == ReviewDashboardViewModel.TASK_ALMOST_DONE)
     }
     
+    @Test func updatesTitleWhenActionsAreUpdated() async {
+        let sut = makeSUT(with: makeAllNonCompletedActions())
+        #expect(sut.motivationTitle == ReviewDashboardViewModel.WHAT_ACTIONS_FOR_TODAY)
+        
+        for action in sut.actions {
+            await sut.setTaskCompleted(for: action.id, isCompleted: true)
+        }
+        
+        #expect(sut.motivationTitle == ReviewDashboardViewModel.TASK_IS_COMPLETED)
+    }
+    
+    @Test func updatesListWhenActionsAreUpdated() async {
+        let item = makeUniqueAction(completed: false)
+        let sut = makeSUT(with: [item])
+        await sut.setTaskCompleted(for: item.id, isCompleted: true)
+        
+        #expect(sut.actions.allSatisfy { $0.isCompleted })
+    }
+    
     // MARK: Helpers
     private func makeSUT(with actions: [StuffActionModel] = []) -> ReviewDashboardViewModel {
         let stuffItem = StuffItem(color: .bg, name: "A Thing", actions: actions)
         return ReviewDashboardViewModel(item: stuffItem, actionLoader: StuffActionsLoaderStub(actions: actions))
+    }
+    
+    func makeUniqueAction(completed: Bool) -> StuffActionModel {
+        return StuffActionModel(id: UUID(), description: "A action", isCompleted: completed)
     }
     
     func makeAlmostCompletedActions() -> [StuffActionModel] {
@@ -112,11 +153,15 @@ struct ReviewPresentationTests {
     }
     
     class StuffActionsLoaderStub: StuffActionStore {
-        
+      
         var actions: [StuffActionModel]
         
         init(actions: [StuffActionModel]) {
             self.actions = actions
+        }
+        
+        func retrieve(for item: UUID) async throws -> [StuffActionModel] {
+            return actions
         }
         
         func add(action: StuffActionModel, to item: UUID) async throws {

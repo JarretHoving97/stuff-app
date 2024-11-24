@@ -8,6 +8,7 @@
 import Foundation
 
 protocol StuffActionStore {
+    func retrieve(for item: UUID) async throws -> [StuffActionModel]
     func add(action: StuffActionModel, to item: UUID) async throws
     func setCompleted(_ id: UUID, isCompleted: Bool) async throws
     func delete(action id: UUID) async throws

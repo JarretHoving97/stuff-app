@@ -10,6 +10,7 @@ import CoreData
 
 class CoreDataStuffStore: StuffStore, StuffActionStore {
 
+    
     private static let modelName = "Stuff"
     private static let model = NSManagedObjectModel.with(name: modelName, in: Bundle(for: CoreDataStuffStore.self))
     
@@ -103,6 +104,14 @@ class CoreDataStuffStore: StuffStore, StuffActionStore {
         try ManagedStuffItem.find(id: id, in: context)
             .map(context.delete)
             .map(context.save)
+    }
+    
+    @MainActor
+    func retrieve(for item: UUID) async throws -> [StuffActionModel] {
+        let context = context
+
+        return try ManagedStuffAction.findAll(for: item, in: context)
+            .map { StuffActionModel(managed: $0)}
     }
     
     @MainActor
