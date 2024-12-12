@@ -43,6 +43,13 @@ public class ReviewDashboardViewModel {
         await reload()
     }
     
+    public func addNewsTask(description: String) async {
+        let item = StuffActionModel(id: UUID(), description: description, isCompleted: false)
+        try? await actionLoader?.add(action: item, to: item.id)
+        actions.insert(item, at: 0)
+        await reload()
+    }
+    
     private func motivationalTitle(for actions: [StuffActionModel]) -> String {
         if actions.isEmpty {
             return ReviewDashboardViewModel.NO_ACTIONS_TITLE

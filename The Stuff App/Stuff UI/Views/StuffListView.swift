@@ -24,26 +24,17 @@ struct StuffListView: View {
         
         ZStack(alignment: .bottomTrailing) { // Set alignment to bottomTrailing
             
-            if let selectedItem = viewModel.selectedItem, showDetail {
-                
-                StuffDetailView(
-                    viewModel: StuffActionViewModel(item: selectedItem),
-                    onClose: {
-                        detailEnabled = false
-                        withAnimation(.spring(duration: 0.2)) {
-                            showDetail.toggle()
-                        }
-                    },
-                    animation: animation
-                )
-                .onDisappear {
-                    detailEnabled = true
-                }
-                
-            } else {
-                ScrollView {
-                    VStack(spacing: 20) {
-                        ForEach(viewModel.items, id: \.self) { item in
+            ScrollView {
+                VStack(spacing: 20) {
+                    ForEach(viewModel.items, id: \.self) { item in
+                        
+                        NavigationLink {
+                            ReviewDashboardView(viewModel: ReviewDashboardViewModel(
+                                item: item,
+                                actionLoader: MOCK_ACTION_STORE()
+                                )
+                            )
+                        } label: {
                             CardView(title: item.name)
                                 .matchedGeometryEffect(id: item.id, in: animation)
                                 .contextMenu {
@@ -52,74 +43,69 @@ struct StuffListView: View {
                                             await viewModel.delete(item.id)
                                             await viewModel.retrieve()
                                         }
-                                        
                                     } label: {
                                         Label("Delete", systemImage: "xmark")
                                     }
                                 }
-                                .onTapGesture {
-                                    guard detailEnabled else { return }
-                                    
-                                    viewModel.selectItem(item: item)
-                                    withAnimation(.spring(duration: 0.4, bounce: 0.2, blendDuration: 0.0)) {
-                                        showDetail.toggle()
-                                    }
-                            }
                         }
                     }
-                    .padding()
-                    .animation(.default, value: viewModel.items)
                 }
-                
-                Button {
-                    presentSheet.toggle()
-                } label: {
-                    ZStack {
-                        Color("item_secondary_color")
-                        Image(systemName: "plus")
-                            .tint(.white)
-                    }
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
-                }
-                .padding(10)
-                
-                
-                .sheet(isPresented: $presentSheet) {
-                    AddStuffItemView(
-                        presentSheet: $presentSheet) { name in
-                            Task {
-                                await viewModel.add(StuffItem(id: UUID(), color: .bg, name: name))
-                            }
-                        }
-                        .presentationDetents([.height(120)])
-                        .onDisappear {
-                            Task {
-                                await viewModel.retrieve()
-                            }
-                        }
-                }
-                .task {
-                    await viewModel.retrieve()
-                }
-                
-                
             }
+            .padding()
+            .animation(.default, value: viewModel.items)
+            
+            Button {
+                presentSheet.toggle()
+            } label: {
+                ZStack {
+                    Color("item_secondary_color")
+                    Image(systemName: "plus")
+                        .tint(.white)
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Circle())
+            }
+            .padding(10)
+            
+            .sheet(isPresented: $presentSheet) {
+                AddStuffItemView(
+                    presentSheet: $presentSheet) { name in
+                        Task {
+                            await viewModel.add(StuffItem(id: UUID(), color: .bg, name: name))
+                        }
+                    }
+                    .presentationDetents([.height(120)])
+                    .onDisappear {
+                        Task {
+                            await viewModel.retrieve()
+                        }
+                    }
+            }
+            .task {
+                await viewModel.retrieve()
+            }
+            
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             Color("bg_color")
                 .ignoresSafeArea(.all)
         )
+        
+        .navigationTitle("")
     }
 }
 
 #Preview {
     
-    StuffListView(
-        viewModel: StuffListViewModel(
-            store: MOCK_STORE()
+    NavigationStack {
+        StuffListView(
+            viewModel: StuffListViewModel(
+                store: MOCK_STORE()
+            )
         )
-    )
+    }
+
 }
 
 

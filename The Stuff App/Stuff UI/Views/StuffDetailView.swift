@@ -56,7 +56,7 @@ struct StuffDetailView: View {
             .foregroundStyle(.white)
             .bold()
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 24))
-    
+        
     }
     
     private var swipableCardView: some View {
@@ -71,7 +71,7 @@ struct StuffDetailView: View {
                 .minimumScaleFactor(0.01)
                 .fontWeight(.semibold)
                 .padding()
-
+            
             // n
             VStack {
                 Spacer() // Pushes the RoundedRectangle to the bottom
@@ -84,7 +84,7 @@ struct StuffDetailView: View {
         .offset(x: 0, y: min(viewOffSet.height + dragOffSet.height, 80))
         .frame(maxHeight: 190)
         .matchedGeometryEffect(id: viewModel.item.id, in: animation)
-        .simultaneousGesture(
+        .gesture(
             DragGesture()
                 .onChanged { gesture in
                     guard gesture.translation.height > -100 else {
@@ -99,7 +99,7 @@ struct StuffDetailView: View {
                     guard gesture.translation.height >= 80, !didGesture else { return }
                     
                     // TODO: Impact if iOS
-        
+                    
                     
                     didGesture = true
                 }
@@ -137,22 +137,20 @@ struct StuffDetailView: View {
         VStack(spacing: 30) {
             Grid(horizontalSpacing: 10, verticalSpacing: 10) {
                 GridRow {
-                
+                    
                     StuffActionView(
                         color: .hilightedItem,
                         icon: Image(systemName: "hand.point.up.left.and.text.fill"),
                         title: "Take action",
                         shortDescription: "Write down actions, schedule them or review them"
                     )
-                
+                    
                     StuffActionView(
                         color: .contentSecondary,
                         icon: Image(systemName: "checkmark.circle"),
                         title: "Mark as completed",
                         shortDescription: "You already completed this task!"
                     )
-                
-                    
                 }
                 .offset(y: showActions ? 0 : 600)
                 
@@ -170,7 +168,7 @@ struct StuffDetailView: View {
                         title: "Move to trash",
                         shortDescription: "When it's not actionable, better delete it"
                     )
-            
+                    
                 }
                 .offset(y: showActions ? 0 : 1000)
                 
@@ -188,7 +186,10 @@ struct StuffDetailView: View {
 #Preview {
     
     @Previewable @Namespace var animation
+    return
+    NavigationStack {
+        StuffDetailView(viewModel: StuffActionViewModel(item: StuffItem(color: .accent, name: "Something to do")), animation: animation)
+    }
     
-    return StuffDetailView(viewModel: StuffActionViewModel(item: StuffItem(color: .accent, name: "Something to do")), animation: animation)
 }
 

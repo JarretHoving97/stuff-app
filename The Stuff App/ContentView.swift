@@ -9,11 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        StuffListView(
-            viewModel: StuffListViewModel(
-                store: MOCK_STORE()
+        NavigationStack {
+            StuffListView(
+                viewModel: StuffListViewModel(
+                    store: MOCK_STORE()
+                )
             )
-        )
+        }
     }
 }
 

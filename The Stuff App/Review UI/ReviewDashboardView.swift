@@ -12,6 +12,8 @@ struct ReviewDashboardView: View {
     
     var viewModel: ReviewDashboardViewModel
     
+    @State private var presentSheet: Bool = false
+    
     init(viewModel: ReviewDashboardViewModel) {
         self.viewModel = viewModel
     }
@@ -21,10 +23,37 @@ struct ReviewDashboardView: View {
             VStack(spacing: 20) {
                 taskView
                 motivationTaskText
+                
+                HStack {
+                    Text("To do for completion")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundStyle(.white)
+                        .font(.title3)
+                    
+                    
+                    Button {
+                        presentSheet.toggle()
+                       
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                }
+          
                 actionsList
             }
             .frame(maxWidth: .infinity)
             .padding()
+            
+            .sheet(isPresented: $presentSheet) {
+                AddStuffItemView(
+                    presentSheet: $presentSheet) { name in
+                        Task {
+                            await viewModel.addNewsTask(description: name)
+                        }
+                    }
+                    .presentationDetents([.height(120)])
+        
+            }
         }
         .background(Color(.bg))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -121,6 +150,7 @@ struct ReviewDashboardView: View {
             .foregroundStyle(.white)
             .font(.largeTitle)
             .fontWeight(.medium)
+            .lineLimit(2, reservesSpace: true)
     }
     
 }

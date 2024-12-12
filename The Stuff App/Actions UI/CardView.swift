@@ -16,12 +16,13 @@ struct CardView: View {
             Text(title)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, alignment: .topLeading)
+                .multilineTextAlignment(.leading)
                 .font(.headline)
                 .lineLimit(4, reservesSpace: false)
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                 .padding()
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color("item_primary_color"))
         .cornerRadius(14)
     }
